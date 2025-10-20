@@ -1,0 +1,350 @@
+version: '3.8'
+
+# =============================================
+# BCOMMERCE MICROSERVICES INFRASTRUCTURE
+# =============================================
+# Docker Compose para todos os bancos PostgreSQL dos microserviços
+# Cada serviço possui seu próprio banco isolado para máxima independência
+# =============================================
+
+networks:
+  bcommerce-network:
+    driver: bridge
+    name: bcommerce-network
+
+volumes:
+  # Volumes persistentes para cada banco de dados
+  auth-db-data:
+    name: bcommerce-auth-db-data
+  user-db-data:
+    name: bcommerce-user-db-data
+  catalog-db-data:
+    name: bcommerce-catalog-db-data
+  cart-db-data:
+    name: bcommerce-cart-db-data
+  promotion-db-data:
+    name: bcommerce-promotion-db-data
+  order-db-data:
+    name: bcommerce-order-db-data
+  notification-db-data:
+    name: bcommerce-notification-db-data
+  events-db-data:
+    name: bcommerce-events-db-data
+  pgadmin-data:
+    name: bcommerce-pgadmin-data
+
+services:
+  # =============================================
+  # AUTH SERVICE DATABASE
+  # =============================================
+  auth-db:
+    image: postgres:16-alpine
+    container_name: bcommerce-auth-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${AUTH_DB_NAME:-auth_service_db}
+      POSTGRES_USER: ${AUTH_DB_USER:-auth_user}
+      POSTGRES_PASSWORD: ${AUTH_DB_PASSWORD:-auth_password_2024}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --lc-collate=C --lc-ctype=C"
+    ports:
+      - "${AUTH_DB_PORT:-5432}:5432"
+    volumes:
+      - auth-db-data:/var/lib/postgresql/data
+      - ./init-scripts/auth-init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    networks:
+      - bcommerce-network
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
+          cpus: '0.25'
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${AUTH_DB_USER:-auth_user} -d ${AUTH_DB_NAME:-auth_service_db}"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # =============================================
+  # USER SERVICE DATABASE
+  # =============================================
+  user-db:
+    image: postgres:16-alpine
+    container_name: bcommerce-user-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${USER_DB_NAME:-user_db}
+      POSTGRES_USER: ${USER_DB_USER:-user_user}
+      POSTGRES_PASSWORD: ${USER_DB_PASSWORD:-user_password_2024}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --lc-collate=C --lc-ctype=C"
+    ports:
+      - "${USER_DB_PORT:-5433}:5432"
+    volumes:
+      - user-db-data:/var/lib/postgresql/data
+      - ./init-scripts/user-init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    networks:
+      - bcommerce-network
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
+          cpus: '0.25'
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${USER_DB_USER:-user_user} -d ${USER_DB_NAME:-user_db}"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # =============================================
+  # CATALOG SERVICE DATABASE
+  # =============================================
+  catalog-db:
+    image: postgres:16-alpine
+    container_name: bcommerce-catalog-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${CATALOG_DB_NAME:-catalog_db}
+      POSTGRES_USER: ${CATALOG_DB_USER:-catalog_user}
+      POSTGRES_PASSWORD: ${CATALOG_DB_PASSWORD:-catalog_password_2024}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --lc-collate=C --lc-ctype=C"
+    ports:
+      - "${CATALOG_DB_PORT:-5434}:5432"
+    volumes:
+      - catalog-db-data:/var/lib/postgresql/data
+      - ./init-scripts/catalog-init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    networks:
+      - bcommerce-network
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: '0.75'
+        reservations:
+          memory: 512M
+          cpus: '0.5'
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${CATALOG_DB_USER:-catalog_user} -d ${CATALOG_DB_NAME:-catalog_db}"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # =============================================
+  # CART SERVICE DATABASE
+  # =============================================
+  cart-db:
+    image: postgres:16-alpine
+    container_name: bcommerce-cart-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${CART_DB_NAME:-cart_db}
+      POSTGRES_USER: ${CART_DB_USER:-cart_user}
+      POSTGRES_PASSWORD: ${CART_DB_PASSWORD:-cart_password_2024}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --lc-collate=C --lc-ctype=C"
+    ports:
+      - "${CART_DB_PORT:-5435}:5432"
+    volumes:
+      - cart-db-data:/var/lib/postgresql/data
+      - ./init-scripts/cart-init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    networks:
+      - bcommerce-network
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
+          cpus: '0.25'
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${CART_DB_USER:-cart_user} -d ${CART_DB_NAME:-cart_db}"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # =============================================
+  # PROMOTION SERVICE DATABASE
+  # =============================================
+  promotion-db:
+    image: postgres:16-alpine
+    container_name: bcommerce-promotion-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${PROMOTION_DB_NAME:-promotion_db}
+      POSTGRES_USER: ${PROMOTION_DB_USER:-promotion_user}
+      POSTGRES_PASSWORD: ${PROMOTION_DB_PASSWORD:-promotion_password_2024}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --lc-collate=C --lc-ctype=C"
+    ports:
+      - "${PROMOTION_DB_PORT:-5436}:5432"
+    volumes:
+      - promotion-db-data:/var/lib/postgresql/data
+      - ./init-scripts/promotion-init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    networks:
+      - bcommerce-network
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
+          cpus: '0.25'
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${PROMOTION_DB_USER:-promotion_user} -d ${PROMOTION_DB_NAME:-promotion_db}"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # =============================================
+  # ORDER SERVICE DATABASE
+  # =============================================
+  order-db:
+    image: postgres:16-alpine
+    container_name: bcommerce-order-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${ORDER_DB_NAME:-order_db}
+      POSTGRES_USER: ${ORDER_DB_USER:-order_user}
+      POSTGRES_PASSWORD: ${ORDER_DB_PASSWORD:-order_password_2024}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --lc-collate=C --lc-ctype=C"
+    ports:
+      - "${ORDER_DB_PORT:-5437}:5432"
+    volumes:
+      - order-db-data:/var/lib/postgresql/data
+      - ./init-scripts/order-init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    networks:
+      - bcommerce-network
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: '0.75'
+        reservations:
+          memory: 512M
+          cpus: '0.5'
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${ORDER_DB_USER:-order_user} -d ${ORDER_DB_NAME:-order_db}"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # =============================================
+  # NOTIFICATION SERVICE DATABASE
+  # =============================================
+  notification-db:
+    image: postgres:16-alpine
+    container_name: bcommerce-notification-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${NOTIFICATION_DB_NAME:-notification_db}
+      POSTGRES_USER: ${NOTIFICATION_DB_USER:-notification_user}
+      POSTGRES_PASSWORD: ${NOTIFICATION_DB_PASSWORD:-notification_password_2024}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --lc-collate=C --lc-ctype=C"
+    ports:
+      - "${NOTIFICATION_DB_PORT:-5438}:5432"
+    volumes:
+      - notification-db-data:/var/lib/postgresql/data
+      - ./init-scripts/notification-init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    networks:
+      - bcommerce-network
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
+          cpus: '0.25'
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${NOTIFICATION_DB_USER:-notification_user} -d ${NOTIFICATION_DB_NAME:-notification_db}"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # =============================================
+  # EVENT STORE SERVICE DATABASE
+  # =============================================
+  events-db:
+    image: postgres:16-alpine
+    container_name: bcommerce-events-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${EVENTS_DB_NAME:-events_db}
+      POSTGRES_USER: ${EVENTS_DB_USER:-events_user}
+      POSTGRES_PASSWORD: ${EVENTS_DB_PASSWORD:-events_password_2024}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --lc-collate=C --lc-ctype=C"
+    ports:
+      - "${EVENTS_DB_PORT:-5439}:5432"
+    volumes:
+      - events-db-data:/var/lib/postgresql/data
+      - ./init-scripts/events-init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    networks:
+      - bcommerce-network
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: '0.75'
+        reservations:
+          memory: 512M
+          cpus: '0.5'
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${EVENTS_DB_USER:-events_user} -d ${EVENTS_DB_NAME:-events_db}"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # =============================================
+  # PGADMIN - ADMINISTRAÇÃO DOS BANCOS
+  # =============================================
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: bcommerce-pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@bcommerce.local}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin_password_2024}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: 'False'
+    ports:
+      - "${PGADMIN_PORT:-8080}:80"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+      - ./pgadmin/servers.json:/pgadmin4/servers.json:ro
+    networks:
+      - bcommerce-network
+    depends_on:
+      - auth-db
+      - user-db
+      - catalog-db
+      - cart-db
+      - promotion-db
+      - order-db
+      - notification-db
+      - events-db
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
+          cpus: '0.25'
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:80/misc/ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s

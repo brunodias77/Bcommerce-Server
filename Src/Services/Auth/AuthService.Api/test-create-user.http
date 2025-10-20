@@ -1,0 +1,48 @@
+### Teste do endpoint de criação de usuário
+
+POST https://localhost:7001/api/user/create
+Content-Type: application/json
+
+{
+  "email": "teste@exemplo.com",
+  "password": "MinhaSenh@123",
+  "fullName": "João da Silva",
+  "phone": "+5511999999999"
+}
+
+###
+
+### Teste com dados inválidos (email duplicado)
+POST https://localhost:7001/api/user/create
+Content-Type: application/json
+
+{
+  "email": "teste@exemplo.com",
+  "password": "OutraSenh@456",
+  "fullName": "Maria Santos",
+  "phone": "+5511888888888"
+}
+
+###
+
+### Teste com dados inválidos (senha fraca)
+POST https://localhost:7001/api/user/create
+Content-Type: application/json
+
+{
+  "email": "usuario2@exemplo.com",
+  "password": "123",
+  "fullName": "Pedro Oliveira"
+}
+
+###
+
+### Teste com dados inválidos (email inválido)
+POST https://localhost:7001/api/user/create
+Content-Type: application/json
+
+{
+  "email": "email-invalido",
+  "password": "MinhaSenh@789",
+  "fullName": "Ana Costa"
+}
