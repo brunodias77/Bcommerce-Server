@@ -11,6 +11,44 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 -- AspNetUsers, AspNetRoles, AspNetUserRoles, AspNetUserClaims,
 -- AspNetUserLogins, AspNetUserTokens, AspNetRoleClaims
 -- =============================================
+CREATE TYPE account_token_type AS ENUM (
+    'ACCOUNT_ACTIVATION',
+    'PASSWORD_RESET'
+);
+
+CREATE TABLE account_tokens (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    -- Identificador único do token
+
+    user_id VARCHAR(450) NOT NULL,
+    -- Usuário associado (mesmo ID de AspNetUsers)
+
+    token VARCHAR(500) UNIQUE NOT NULL,
+    -- Valor único do token (hash seguro, ex: SHA256)
+
+    token_type account_token_type NOT NULL,
+    -- Tipo do token (ativação ou redefinição de senha)
+
+    expires_at TIMESTAMP NOT NULL,
+    -- Data e hora de expiração do token
+
+    used_at TIMESTAMP,
+    -- Data e hora em que o token foi usado (se aplicável)
+
+    revoked_at TIMESTAMP,
+    -- Data e hora em que o token foi revogado (caso cancelado manualmente)
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    -- Data de criação
+
+    is_active BOOLEAN GENERATED ALWAYS AS (
+        used_at IS NULL
+        AND revoked_at IS NULL
+        AND expires_at > CURRENT_TIMESTAMP
+    ) STORED
+    -- Campo calculado: indica se o token ainda é válido
+);
+
 CREATE TABLE users (
     -- Armazena informações adicionais de perfil do usuário
     user_id VARCHAR(450) PRIMARY KEY,
@@ -21,8 +59,6 @@ CREATE TABLE users (
     -- Telefone de contato
     birth_date DATE,
     -- Data de nascimento
-    activation_code VARCHAR(100),
-    -- Código de ativação do usuário (para verificação de conta)
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     -- Data de criação do registro
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -73,6 +109,14 @@ CREATE INDEX idx_refresh_tokens_token ON refresh_tokens(token);
 CREATE INDEX idx_security_logs_user_id ON security_logs(user_id);
 
 CREATE INDEX idx_security_logs_created_at ON security_logs(created_at);
+
+CREATE INDEX idx_account_tokens_user_id ON account_tokens(user_id);
+
+CREATE INDEX idx_account_tokens_token_type ON account_tokens(token_type);
+
+CREATE INDEX idx_account_tokens_expires_at ON account_tokens(expires_at);
+
+CREATE INDEX idx_account_tokens_is_active ON account_tokens(is_active);
 
 -- =============================================
 -- USER  SERVICE - user_db
