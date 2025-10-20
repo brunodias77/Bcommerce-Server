@@ -24,6 +24,11 @@ public class User : IdentityUser
     public DateTime? BirthDate { get; set; }
 
     /// <summary>
+    /// Código de ativação do usuário (usado para verificação de conta)
+    /// </summary>
+    public string? ActivationCode { get; set; }
+
+    /// <summary>
     /// Data de criação do registro
     /// </summary>
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

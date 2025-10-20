@@ -27,6 +27,10 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(e => e.BirthDate)
             .HasComment("Data de nascimento");
 
+         builder.Property(e => e.ActivationCode)
+            .HasMaxLength(100)
+            .HasComment("Código de ativação do usuário (para verificação de conta)");
+
         builder.Property(e => e.CreatedAt)
             .HasDefaultValueSql("CURRENT_TIMESTAMP")
             .HasComment("Data de criação do registro");
