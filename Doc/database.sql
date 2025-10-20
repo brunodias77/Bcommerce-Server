@@ -21,6 +21,8 @@ CREATE TABLE users (
     -- Telefone de contato
     birth_date DATE,
     -- Data de nascimento
+    activation_code VARCHAR(100),
+    -- Código de ativação do usuário (para verificação de conta)
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     -- Data de criação do registro
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
