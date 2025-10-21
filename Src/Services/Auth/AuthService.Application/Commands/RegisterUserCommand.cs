@@ -7,7 +7,7 @@ namespace AuthService.Application.Commands;
 /// <summary>
 /// Command para registro de novo usuário no sistema
 /// </summary>
-public class RegisterUserCommand : IRequest<ApiResponse<Guid>>
+public class RegisterUserCommand : IRequest<ApiResponse<RegisterUserResponse>>
 {
     /// <summary>
     /// Email do usuário (obrigatório e único)
