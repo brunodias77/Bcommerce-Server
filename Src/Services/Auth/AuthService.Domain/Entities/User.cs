@@ -41,4 +41,9 @@ public class User : IdentityUser
     // Relacionamentos com outras entidades
     public virtual ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
     public virtual ICollection<SecurityLog> SecurityLogs { get; set; } = new List<SecurityLog>();
+    
+    /// <summary>
+    /// Tokens de conta (ativação, redefinição de senha) associados ao usuário
+    /// </summary>
+    public virtual ICollection<AccountToken> AccountTokens { get; set; } = new List<AccountToken>();
 }
