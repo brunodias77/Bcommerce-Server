@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using BuildingBlocks.Mediator;
 using BuildingBlocks.Results;
 
-namespace AuthService.Application.Commands;
+namespace AuthService.Application.Commands.User.Register;
 
 /// <summary>
 /// Command para registro de novo usuário no sistema

@@ -2,6 +2,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using AuthService.Domain.Entities;
 using AuthService.Infrastructure.Data;
+using BuildingBlocks.Mediator;
+using AuthService.Application.Commands.User.Register;
+using AuthService.Domain.Services;
+using AuthService.Infrastructure.Services;
+using AuthService.Domain.Services.Token;
+using AuthService.Application.Services;
+using BuildingBlocks.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +44,15 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
 })
 .AddEntityFrameworkStores<AuthDbContext>()
 .AddDefaultTokenProviders();
+
+// Configuração do Mediator
+builder.Services.AddMediator(typeof(RegisterUserCommandHandler).Assembly);
+
+// Configuração dos serviços de aplicação
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+builder.Services.AddScoped<ITokenJwtService, TokenJwtService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
