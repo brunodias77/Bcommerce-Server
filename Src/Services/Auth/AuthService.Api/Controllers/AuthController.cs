@@ -3,6 +3,7 @@ using BuildingBlocks.Mediator;
 using BuildingBlocks.Results;
 using AuthService.Application.Commands.User.Register;
 using AuthService.Application.Commands.User.ActivateAccount;
+using AuthService.Application.Commands.User.ResendActivationToken;
 
 namespace AuthService.Api.Controllers;
 
@@ -164,6 +165,63 @@ public class AuthController : ControllerBase
             
             return StatusCode(StatusCodes.Status500InternalServerError,
                 ApiResponse<ActivateAccountResponse>.Fail(
+                    "INTERNAL_ERROR", "Erro interno do servidor. Tente novamente mais tarde."));
+        }
+    }
+
+    /// <summary>
+    /// Reenvia o token de ativação para o email do usuário
+    /// </summary>
+    /// <param name="command">Dados contendo o email do usuário</param>
+    /// <param name="cancellationToken">Token de cancelamento</param>
+    /// <returns>Resposta com dados do reenvio</returns>
+    /// <response code="200">Token reenviado com sucesso</response>
+    /// <response code="400">Email inválido ou usuário não encontrado</response>
+    /// <response code="500">Erro interno do servidor</response>
+    [HttpPost("resend-activation-token")]
+    [ProducesResponseType(typeof(ApiResponse<ResendActivationTokenResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<ResendActivationTokenResponse>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<ResendActivationTokenResponse>), StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<ApiResponse<ResendActivationTokenResponse>>> ResendActivationToken(
+        [FromBody] ResendActivationTokenCommand command,
+        CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            _logger.LogInformation("Iniciando processo de reenvio de token de ativação para email: {Email}", 
+                command?.Email?.Substring(0, Math.Min(command.Email?.Length ?? 0, 3)) + "***");
+
+            // Validação básica do command
+            if (command == null)
+            {
+                _logger.LogWarning("Command de reenvio de token é nulo");
+                return BadRequest(ApiResponse<ResendActivationTokenResponse>.Fail(
+                    "MISSING_DATA", "Dados são obrigatórios"));
+            }
+
+            // Processa o command através do Mediator
+            var result = await _mediator.SendAsync<ApiResponse<ResendActivationTokenResponse>>(command, cancellationToken);
+
+            // Verifica se o resultado foi bem-sucedido
+            if (result.Success)
+            {
+                _logger.LogInformation("Token de ativação reenviado com sucesso para: {Email}", 
+                    command.Email?.Substring(0, Math.Min(command.Email.Length, 3)) + "***");
+                return Ok(result);
+            }
+
+            // Se chegou aqui, houve erro no reenvio
+            _logger.LogWarning("Falha no reenvio de token para {Email}: {Errors}", 
+                command.Email?.Substring(0, Math.Min(command.Email?.Length ?? 0, 3)) + "***", result.Errors);
+            return BadRequest(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro inesperado durante o reenvio de token para {Email}", 
+                command?.Email?.Substring(0, Math.Min(command.Email?.Length ?? 0, 3)) + "***");
+
+            return StatusCode(StatusCodes.Status500InternalServerError,
+                ApiResponse<ResendActivationTokenResponse>.Fail(
                     "INTERNAL_ERROR", "Erro interno do servidor. Tente novamente mais tarde."));
         }
     }
