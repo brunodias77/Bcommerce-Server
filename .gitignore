@@ -503,3 +503,69 @@ grafana_data/
 .cache/
 .tmp/
 .temp/
+
+# Frontend Applications
+## Angular specific
+Src/Frontend/Angular/**/node_modules/
+Src/Frontend/Angular/**/dist/
+Src/Frontend/Angular/**/.angular/
+Src/Frontend/Angular/**/coverage/
+Src/Frontend/Angular/**/e2e/
+Src/Frontend/Angular/**/.nyc_output/
+Src/Frontend/Angular/**/karma.conf.js
+Src/Frontend/Angular/**/protractor.conf.js
+Src/Frontend/Angular/**/*.spec.ts
+Src/Frontend/Angular/**/*.e2e-spec.ts
+
+## React specific
+Src/Frontend/React/**/node_modules/
+Src/Frontend/React/**/build/
+Src/Frontend/React/**/dist/
+Src/Frontend/React/**/.next/
+Src/Frontend/React/**/out/
+Src/Frontend/React/**/coverage/
+Src/Frontend/React/**/.nyc_output/
+Src/Frontend/React/**/storybook-static/
+
+## Frontend build tools
+Src/Frontend/**/.vite/
+Src/Frontend/**/vite.config.*.timestamp-*
+Src/Frontend/**/.turbo/
+Src/Frontend/**/webpack-stats.json
+Src/Frontend/**/bundle-analyzer-report.html
+Src/Frontend/**/.parcel-cache/
+Src/Frontend/**/rollup.config.*.timestamp-*
+
+## Frontend package managers
+Src/Frontend/**/package-lock.json
+Src/Frontend/**/yarn.lock
+Src/Frontend/**/pnpm-lock.yaml
+Src/Frontend/**/.pnpm-store/
+Src/Frontend/**/.yarn/
+Src/Frontend/**/yarn-error.log
+
+## Frontend testing and coverage
+Src/Frontend/**/jest.config.js
+Src/Frontend/**/cypress.config.js
+Src/Frontend/**/cypress/
+Src/Frontend/**/playwright-report/
+Src/Frontend/**/test-results/
+
+## Frontend environment and config
+Src/Frontend/**/.env.local
+Src/Frontend/**/.env.development.local
+Src/Frontend/**/.env.test.local
+Src/Frontend/**/.env.production.local
+
+## Frontend IDE specific
+Src/Frontend/**/.vscode/settings.json
+Src/Frontend/**/.vscode/launch.json
+Src/Frontend/**/.idea/
+Src/Frontend/**/*.sublime-workspace
+Src/Frontend/**/*.sublime-project
+
+## Frontend temporary and cache files
+Src/Frontend/**/.eslintcache
+Src/Frontend/**/.stylelintcache
+Src/Frontend/**/tsconfig.tsbuildinfo
+Src/Frontend/**/*.tsbuildinfo
