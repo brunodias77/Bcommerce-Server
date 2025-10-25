@@ -14,5 +14,6 @@ public class ResendActivationTokenCommand : IRequest<ApiResponse<ResendActivatio
     /// </summary>
     [Required(ErrorMessage = "O email é obrigatório")]
     [EmailAddress(ErrorMessage = "Formato de email inválido")]
+    [StringLength(256, ErrorMessage = "Email deve ter no máximo 256 caracteres")]
     public string Email { get; set; } = string.Empty;
 }
