@@ -69,8 +69,9 @@ public class EmailService : IEmailService
             _logger.LogInformation("   📍 Destinatário: {Email}", email);
             _logger.LogInformation("   🔑 Token: {Token}", MaskToken(confirmationToken));
             _logger.LogInformation("   👤 UserId: {UserId}", userId);
-            _logger.LogInformation("   🔗 Link de confirmação: https://localhost:5001/auth/confirm-email?token={Token}&userId={UserId}", 
-                confirmationToken, userId);
+            var encodedToken = Uri.EscapeDataString(confirmationToken);
+            _logger.LogInformation("   🔗 Link de confirmação: http://localhost:5050/api/auth/confirm-email?token={EncodedToken}&userId={UserId}", 
+                encodedToken, userId);
             _logger.LogInformation("   ⏱️ Tempo de envio simulado: {Delay}ms", delay);
 
             return true;
