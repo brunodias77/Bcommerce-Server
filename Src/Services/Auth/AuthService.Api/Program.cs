@@ -1,15 +1,16 @@
+using AuthService.Application.Commands.User.ActivateAccount;
+using AuthService.Application.Commands.User.Register;
+using AuthService.Application.Services;
+using AuthService.Domain.Entities;
+using AuthService.Domain.Services;
+using AuthService.Domain.Services.Token;
+using AuthService.Infrastructure.Data;
+using AuthService.Infrastructure.Services;
+using BuildingBlocks.Data;
+using BuildingBlocks.Mediator;
+using BuildingBlocks.Middlewares;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using AuthService.Domain.Entities;
-using AuthService.Infrastructure.Data;
-using BuildingBlocks.Mediator;
-using AuthService.Application.Commands.User.Register;
-using AuthService.Application.Commands.User.ActivateAccount;
-using AuthService.Domain.Services;
-using AuthService.Infrastructure.Services;
-using AuthService.Domain.Services.Token;
-using AuthService.Application.Services;
-using BuildingBlocks.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -63,6 +64,29 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+// ORDEM DOS MIDDLEWARES É IMPORTANTE! ⚠️
+
+// 1. Security Headers (primeiro)
+app.UseMiddleware<SecurityHeadersMiddleware>();
+
+// 2. Exception Handling (catch all)
+app.UseMiddleware<ExceptionHandlingMiddleware>();
+
+// 3. Request/Response Logging
+if (app.Environment.IsDevelopment())
+{
+    app.UseMiddleware<RequestResponseLoggingMiddleware>();
+}
+
+// 4. Performance Monitoring
+app.UseMiddleware<PerformanceMonitoringMiddleware>();
+
+// 5. Rate Limiting
+app.UseMiddleware<RateLimitingMiddleware>();
+
+// 6. Request Validation
+app.UseMiddleware<RequestValidationMiddleware>();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -71,6 +95,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
 
 // Middleware de autenticação e autorização
 app.UseAuthentication();
