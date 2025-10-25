@@ -16,8 +16,8 @@ public static class ServiceCollectionExtensions
     /// <returns>ServiceCollection para fluent interface</returns>
     public static IServiceCollection AddMediator(this IServiceCollection services, params Assembly[] assemblies)
     {
-        // Registra o Mediator como Singleton
-        services.AddSingleton<IMediator, Mediator>();
+        // Registra o Mediator como Scoped
+        services.AddScoped<IMediator, Mediator>();
 
         // Se nenhum assembly foi especificado, usa o assembly que está chamando
         if (assemblies.Length == 0)
@@ -74,7 +74,7 @@ public static class ServiceCollectionExtensions
 
                 foreach (var interfaceType in interfaces)
                 {
-                    services.AddTransient(interfaceType, handlerType);
+                    services.AddScoped(interfaceType, handlerType);
                 }
             }
 
@@ -94,7 +94,7 @@ public static class ServiceCollectionExtensions
 
                 foreach (var interfaceType in interfaces)
                 {
-                    services.AddTransient(interfaceType, handlerType);
+                    services.AddScoped(interfaceType, handlerType);
                 }
             }
         }

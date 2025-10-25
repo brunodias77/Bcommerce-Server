@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using BuildingBlocks.Mediator;
 using BuildingBlocks.Results;
 using AuthService.Application.Commands.User.Register;
+using AuthService.Application.Commands.User.ActivateAccount;
 
 namespace AuthService.Api.Controllers;
 
@@ -10,7 +11,7 @@ namespace AuthService.Api.Controllers;
 /// Fornece endpoints para registro, login e outras operações relacionadas à autenticação
 /// </summary>
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/auth")]
 [Produces("application/json")]
 public class AuthController : ControllerBase
 {
@@ -50,20 +51,7 @@ public class AuthController : ControllerBase
             _logger.LogInformation("Iniciando processo de registro para email: {Email}", 
                 command?.Email?.Substring(0, Math.Min(command.Email.Length, 3)) + "***");
 
-            // Validação do ModelState
-            if (!ModelState.IsValid)
-            {
-                _logger.LogWarning("Dados de entrada inválidos para registro");
-                var errors = ModelState.Values
-                    .SelectMany(v => v.Errors)
-                    .Select(e => e.ErrorMessage)
-                    .ToList();
-                
-                return BadRequest(ApiResponse<RegisterUserResponse>.Fail(
-                    "INVALID_DATA", $"Dados inválidos: {string.Join(", ", errors)}"));
-            }
-
-            // Validação adicional do command
+            // Validação básica do command (apenas nulidade)
             if (command == null)
             {
                 _logger.LogWarning("Command de registro é nulo");
@@ -91,6 +79,83 @@ public class AuthController : ControllerBase
             
             return StatusCode(StatusCodes.Status500InternalServerError,
                 ApiResponse<RegisterUserResponse>.Fail(
+                    "INTERNAL_ERROR", "Erro interno do servidor. Tente novamente mais tarde."));
+        }
+    }
+
+    /// <summary>
+    /// Ativa uma conta de usuário através do token de confirmação de email
+    /// </summary>
+    /// <param name="token">Token de confirmação de email</param>
+    /// <param name="userId">ID do usuário a ser ativado</param>
+    /// <param name="cancellationToken">Token de cancelamento</param>
+    /// <returns>Resposta com dados da ativação</returns>
+    /// <response code="200">Conta ativada com sucesso</response>
+    /// <response code="400">Token inválido ou usuário não encontrado</response>
+    /// <response code="500">Erro interno do servidor</response>
+    [HttpGet("confirm-email")]
+    [ProducesResponseType(typeof(ApiResponse<ActivateAccountResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<ActivateAccountResponse>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<ActivateAccountResponse>), StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<ApiResponse<ActivateAccountResponse>>> ConfirmEmail(
+        [FromQuery] string token,
+        [FromQuery] string userId,
+        CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            _logger.LogInformation("Iniciando processo de ativação de conta para usuário: {UserId}", userId);
+
+            // Validação dos parâmetros
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                _logger.LogWarning("Token de confirmação não fornecido");
+                return BadRequest(ApiResponse<ActivateAccountResponse>.Fail(
+                    "MISSING_TOKEN", "Token de confirmação é obrigatório"));
+            }
+
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                _logger.LogWarning("UserId não fornecido");
+                return BadRequest(ApiResponse<ActivateAccountResponse>.Fail(
+                    "MISSING_USERID", "ID do usuário é obrigatório"));
+            }
+
+            // Validar formato do GUID
+            if (!Guid.TryParse(userId, out _))
+            {
+                _logger.LogWarning("UserId com formato inválido: {UserId}", userId);
+                return BadRequest(ApiResponse<ActivateAccountResponse>.Fail(
+                    "INVALID_USERID", "ID do usuário deve ser um GUID válido"));
+            }
+
+            // Criar o command
+            var command = new ActivateAccountCommand
+            {
+                Token = token,
+                UserId = userId
+            };
+
+            // Processa o command através do Mediator
+            var result = await _mediator.SendAsync<ApiResponse<ActivateAccountResponse>>(command, cancellationToken);
+
+            // Verifica se o resultado foi bem-sucedido
+            if (result.Success)
+            {
+                _logger.LogInformation("Conta ativada com sucesso para usuário: {UserId}", userId);
+                return Ok(result);
+            }
+
+            // Se chegou aqui, houve erro na ativação
+            _logger.LogWarning("Falha na ativação da conta do usuário {UserId}: {Errors}", userId, result.Errors);
+            return BadRequest(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro inesperado durante a ativação da conta do usuário {UserId}", userId);
+            
+            return StatusCode(StatusCodes.Status500InternalServerError,
+                ApiResponse<ActivateAccountResponse>.Fail(
                     "INTERNAL_ERROR", "Erro interno do servidor. Tente novamente mais tarde."));
         }
     }

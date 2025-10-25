@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using AuthService.Domain.Services;
+using AuthService.Domain.Validations;
 using BuildingBlocks.Mediator;
 using BuildingBlocks.Results;
 using BuildingBlocks.Data;
@@ -82,6 +83,22 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, A
                 UpdatedAt = DateTime.UtcNow
             };
 
+            // 2.1. Validar dados do usuário antes da criação
+            _logger.LogInformation("🔍 Validando dados do usuário: {Email}", request.Email);
+            var validationResult = UserValidation.ValidateForCreation(user);
+            
+            if (validationResult.HasErrors)
+            {
+                var validationErrors = validationResult.Errors.ToList();
+                _logger.LogWarning("⚠️ Dados inválidos para o usuário {Email}: {Errors}", 
+                    request.Email, string.Join(", ", validationErrors.Select(e => e.Message)));
+                
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+                
+                return ApiResponse<RegisterUserResponse>.Fail(validationErrors);
+            }
+
+            _logger.LogInformation("✅ Dados do usuário validados com sucesso: {Email}", request.Email);
             _logger.LogInformation("👤 Criando usuário: {Email} - {FullName}", request.Email, request.FullName);
             var createResult = await _userManager.CreateAsync(user, request.Password);
 

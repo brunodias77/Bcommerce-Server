@@ -4,6 +4,7 @@ using AuthService.Domain.Entities;
 using AuthService.Infrastructure.Data;
 using BuildingBlocks.Mediator;
 using AuthService.Application.Commands.User.Register;
+using AuthService.Application.Commands.User.ActivateAccount;
 using AuthService.Domain.Services;
 using AuthService.Infrastructure.Services;
 using AuthService.Domain.Services.Token;
@@ -43,7 +44,8 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
     options.SignIn.RequireConfirmedPhoneNumber = false;
 })
 .AddEntityFrameworkStores<AuthDbContext>()
-.AddDefaultTokenProviders();
+.AddDefaultTokenProviders()
+.AddErrorDescriber<PortugueseIdentityErrorDescriber>();
 
 // Configuração do Mediator
 builder.Services.AddMediator(typeof(RegisterUserCommandHandler).Assembly);
