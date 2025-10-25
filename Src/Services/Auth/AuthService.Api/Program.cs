@@ -6,8 +6,10 @@ using AuthService.Domain.Services;
 using AuthService.Domain.Services.Token;
 using AuthService.Infrastructure.Data;
 using AuthService.Infrastructure.Services;
+using AuthService.Api.HealthChecks;
 using BuildingBlocks.Data;
 using BuildingBlocks.Mediator;
+using BuildingBlocks.Extensions;
 using BuildingBlocks.Middlewares;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -57,6 +59,11 @@ builder.Services.AddScoped<ITokenJwtService, TokenJwtService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+// Configuração dos Health Checks
+builder.Services.AddHealthChecks()
+    .AddDbContextCheck<AuthDbContext>("database")
+    .AddCheck<IdentityHealthCheck>("identity");
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -64,43 +71,29 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// ORDEM DOS MIDDLEWARES É IMPORTANTE! ⚠️
-
-// 1. Security Headers (primeiro)
-app.UseMiddleware<SecurityHeadersMiddleware>();
-
-// 2. Exception Handling (catch all)
-app.UseMiddleware<ExceptionHandlingMiddleware>();
-
-// 3. Request/Response Logging
-if (app.Environment.IsDevelopment())
-{
-    app.UseMiddleware<RequestResponseLoggingMiddleware>();
-}
-
-// 4. Performance Monitoring
-app.UseMiddleware<PerformanceMonitoringMiddleware>();
-
-// 5. Rate Limiting
-app.UseMiddleware<RateLimitingMiddleware>();
-
-// 6. Request Validation
-app.UseMiddleware<RequestValidationMiddleware>();
-
 // Configure the HTTP request pipeline.
+// 1. HTTPS Redirection - SEMPRE PRIMEIRO para forçar HTTPS
+app.UseHttpsRedirection();
+
+// 2. Swagger - apenas em desenvolvimento
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// 3. BuildingBlocks Middlewares - segurança, validação, monitoramento
+app.UseBuildingBlocksMiddleware(app.Environment.IsDevelopment());
 
-
-// Middleware de autenticação e autorização
+// 4. Middleware de autenticação e autorização - APÓS os middlewares de segurança
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Configuração dos endpoints de Health Checks
+app.MapHealthChecks("/health");
+app.MapHealthChecks("/health/ready");
+app.MapHealthChecks("/health/live");
 
 app.Run();
