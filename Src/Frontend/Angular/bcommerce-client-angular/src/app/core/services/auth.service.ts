@@ -252,13 +252,41 @@ export class AuthService {
    * Trata erros das requisições HTTP
    */
   private handleError(error: any): ApiResponse<any> {
-    console.error('Erro na requisição:', error);
-    
     if (error instanceof HttpErrorResponse) {
+      // Tentar extrair a mensagem de diferentes estruturas possíveis do backend
+      let errorMessage = 'Erro na comunicação com o servidor';
+      
+      if (error.error) {
+        // Caso 1: error.error.errors[0].message (estrutura do backend atual)
+        if (error.error.errors && Array.isArray(error.error.errors) && error.error.errors.length > 0 && error.error.errors[0].message) {
+          errorMessage = error.error.errors[0].message;
+        }
+        // Caso 2: error.error.message (estrutura padrão)
+        else if (error.error.message) {
+          errorMessage = error.error.message;
+        }
+        // Caso 3: error.error.Message (com M maiúsculo - padrão .NET)
+        else if (error.error.Message) {
+          errorMessage = error.error.Message;
+        }
+        // Caso 4: error.error é uma string direta
+        else if (typeof error.error === 'string') {
+          errorMessage = error.error;
+        }
+        // Caso 5: error.error.title (algumas APIs usam title)
+        else if (error.error.title) {
+          errorMessage = error.error.title;
+        }
+        // Caso 6: error.error.detail (algumas APIs usam detail)
+        else if (error.error.detail) {
+          errorMessage = error.error.detail;
+        }
+      }
+      
       return {
         success: false,
-        message: error.error?.message || 'Erro na comunicação com o servidor',
-        errors: error.error?.errors || [error.message]
+        message: errorMessage,
+        errors: error.error?.errors || [errorMessage]
       };
     }
 
