@@ -55,7 +55,20 @@ app.UseAuthorization();
 app.MapControllers();
 
 // Configuração dos endpoints de Health Checks
-app.MapHealthChecks("/health");
+app.MapHealthChecks("/health", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions
+{
+    ResponseWriter = async (context, report) =>
+    {
+        context.Response.ContentType = "application/json";
+        var response = new
+        {
+            status = report.Status.ToString(),
+            timestamp = DateTime.UtcNow,
+            application = "AuthService.Api"
+        };
+        await context.Response.WriteAsync(System.Text.Json.JsonSerializer.Serialize(response));
+    }
+});
 app.MapHealthChecks("/health/ready");
 app.MapHealthChecks("/health/live");
 
