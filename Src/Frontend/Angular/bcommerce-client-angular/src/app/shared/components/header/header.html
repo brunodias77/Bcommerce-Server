@@ -1,41 +1,122 @@
-<!-- Header Sticky -->
+<!-- Header E-commerce Sticky -->
 <header [class]="headerClasses()">
   <div [class]="containerClasses()">
-    <!-- Logo -->
-    <div class="flex items-center space-x-3">
-      <div [class]="logoClasses()">
-        <svg class="w-full h-full text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-          <path
-            fill-rule="evenodd"
-            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z"
-            clip-rule="evenodd"
-          />
-        </svg>
+    <!-- Logo e Categorias -->
+    <div class="flex items-center space-x-6">
+      <div class="flex items-center space-x-3">
+        <div [class]="logoClasses()">
+          <svg class="w-full h-full text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+            <path
+              d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"
+            />
+          </svg>
+        </div>
+        <h1 [class]="titleClasses()">ShopStore</h1>
       </div>
-      <h1 [class]="titleClasses()">MeuSite</h1>
+
+      <!-- Categorias Desktop -->
+      <nav class="hidden lg:flex items-center space-x-6">
+        <a href="#" [class]="navLinkClasses()">Novidades</a>
+        <a href="#" [class]="navLinkClasses()">Masculino</a>
+        <a href="#" [class]="navLinkClasses()">Feminino</a>
+        <a href="#" [class]="navLinkClasses()">Ofertas</a>
+      </nav>
     </div>
 
-    <!-- Navigation -->
-    <nav class="hidden md:flex items-center space-x-8">
-      <a href="#" [class]="navLinkClasses()"> Home </a>
-      <a href="#" [class]="navLinkClasses()"> Sobre </a>
-      <a href="#" [class]="navLinkClasses()"> Serviços </a>
-      <a href="#" [class]="navLinkClasses()"> Contato </a>
-    </nav>
+    <!-- Barra de Busca -->
+    <div class="hidden md:flex flex-1 max-w-xl mx-6">
+      <div [class]="searchBarClasses()">
+        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+          />
+        </svg>
+        <input type="text" placeholder="Buscar produtos..." [class]="searchInputClasses()" />
+      </div>
+    </div>
 
-    <!-- CTA Button -->
-    <button [class]="ctaButtonClasses()">Começar</button>
+    <!-- Actions: Favoritos, Conta e Carrinho -->
+    <div class="flex items-center space-x-4">
+      <!-- Favoritos -->
+      <button
+        class="hidden md:block p-2 text-gray-600 hover:text-red-500 transition-colors relative"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+          />
+        </svg>
+        <span
+          class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-semibold"
+          >3</span
+        >
+      </button>
 
-    <!-- Mobile Menu Button -->
-    <button class="md:hidden p-2 text-gray-600 hover:text-gray-900">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <!-- Conta -->
+      <button class="hidden md:block p-2 text-gray-600 hover:text-blue-600 transition-colors">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+          />
+        </svg>
+      </button>
+
+      <!-- Carrinho -->
+      <button [class]="cartButtonClasses()">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+          />
+        </svg>
+        <span
+          class="absolute -top-1 -right-1 bg-blue-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-semibold"
+          >5</span
+        >
+        <span class="hidden lg:inline ml-2 font-medium">R$ 299,90</span>
+      </button>
+
+      <!-- Mobile Menu Button -->
+      <button class="md:hidden p-2 text-gray-600 hover:text-gray-900">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h16M4 18h16"
+          />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Barra de busca mobile -->
+  <div class="md:hidden px-4 pb-3">
+    <div [class]="searchBarClasses()">
+      <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path
           stroke-linecap="round"
           stroke-linejoin="round"
           stroke-width="2"
-          d="M4 6h16M4 12h16M4 18h16"
+          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
         />
       </svg>
-    </button>
+      <input
+        type="text"
+        placeholder="Buscar produtos..."
+        class="flex-1 bg-transparent outline-none text-sm text-gray-700 placeholder-gray-400"
+      />
+    </div>
   </div>
 </header>

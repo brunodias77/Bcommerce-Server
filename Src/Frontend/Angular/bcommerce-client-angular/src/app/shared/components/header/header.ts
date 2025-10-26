@@ -10,47 +10,52 @@ export class Header {
   // Signal para controlar o estado do scroll
   isScrolled = signal(false);
 
-  // Dados de exemplo
+  // Dados de exemplo para produtos
   contentItems = [
     {
       id: 1,
-      title: 'Design Moderno',
-      description:
-        'Interface limpa e moderna que se adapta perfeitamente ao comportamento do usuário.',
+      title: 'Camiseta Premium',
+      description: 'Camiseta 100% algodão com design exclusivo e alta qualidade.',
+      price: 89.9,
     },
     {
       id: 2,
-      title: 'Performance',
-      description: 'Otimizado com Angular Signals para máxima performance e reatividade.',
+      title: 'Tênis Esportivo',
+      description: 'Tênis confortável e moderno para todas as ocasiões.',
+      price: 249.9,
     },
     {
       id: 3,
-      title: 'Responsivo',
-      description: 'Funciona perfeitamente em todos os dispositivos e tamanhos de tela.',
+      title: 'Jaqueta Jeans',
+      description: 'Jaqueta clássica em jeans premium com acabamento impecável.',
+      price: 199.9,
     },
     {
       id: 4,
-      title: 'Tailwind CSS',
-      description: 'Estilizado com Tailwind CSS v4 para um desenvolvimento rápido e eficiente.',
+      title: 'Relógio Digital',
+      description: 'Relógio moderno com múltiplas funcionalidades e design elegante.',
+      price: 159.9,
     },
     {
       id: 5,
-      title: 'Animações Suaves',
-      description: 'Transições elegantes que proporcionam uma experiência de usuário superior.',
+      title: 'Mochila Urbana',
+      description: 'Mochila versátil com compartimentos organizados e material resistente.',
+      price: 129.9,
     },
     {
       id: 6,
-      title: 'Acessibilidade',
-      description: 'Desenvolvido seguindo as melhores práticas de acessibilidade web.',
+      title: 'Óculos de Sol',
+      description: 'Óculos com proteção UV e design contemporâneo.',
+      price: 179.9,
     },
   ];
 
   scrollContent = [
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-    'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-    'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.',
-    'Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet.',
-    'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.',
+    'Aproveite nossas ofertas especiais! Descontos de até 50% em produtos selecionados.',
+    'Frete grátis para compras acima de R$ 199. Entrega rápida e segura em todo Brasil.',
+    'Novidades toda semana! Cadastre-se e receba em primeira mão nossas promoções.',
+    'Pagamento facilitado em até 12x sem juros. Aceitamos todos os cartões.',
+    'Satisfação garantida ou seu dinheiro de volta. 30 dias para trocas e devoluções.',
   ];
 
   @HostListener('window:scroll', [])
@@ -59,7 +64,7 @@ export class Header {
     this.isScrolled.set(scrollTop > 50);
   }
 
-  // Classes computadas - OTIMIZADAS
+  // Classes computadas - Estilo E-commerce
   headerClasses() {
     const base = 'fixed z-50 transition-all duration-300 ease-out bg-white shadow-md';
     return this.isScrolled()
@@ -70,34 +75,46 @@ export class Header {
   containerClasses() {
     const base = 'flex items-center justify-between mx-auto transition-all duration-300';
     return this.isScrolled()
-      ? `${base} max-w-6xl px-6 py-3`
+      ? `${base} max-w-7xl px-4 py-2`
       : `${base} max-w-7xl px-4 sm:px-6 lg:px-8 py-4`;
   }
 
   mainClasses() {
-    return this.isScrolled() ? 'pt-20' : 'pt-24';
+    return this.isScrolled() ? 'pt-28' : 'pt-32';
   }
 
   logoClasses() {
     return this.isScrolled()
-      ? 'w-8 h-8 transition-all duration-300'
-      : 'w-10 h-10 transition-all duration-300';
+      ? 'w-7 h-7 transition-all duration-300'
+      : 'w-9 h-9 transition-all duration-300';
   }
 
   titleClasses() {
     const base = 'font-bold text-gray-900 transition-all duration-300';
-    return this.isScrolled() ? `${base} text-xl` : `${base} text-2xl`;
+    return this.isScrolled() ? `${base} text-lg` : `${base} text-xl`;
   }
 
   navLinkClasses() {
-    const base = 'text-gray-600 hover:text-blue-600 transition-colors font-medium';
-    return this.isScrolled() ? `${base} text-sm` : `${base} text-base`;
+    const base =
+      'text-gray-600 hover:text-blue-600 transition-colors font-medium whitespace-nowrap';
+    return this.isScrolled() ? `${base} text-sm` : `${base} text-sm`;
   }
 
-  ctaButtonClasses() {
-    const base = 'bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-all';
+  searchBarClasses() {
+    const base =
+      'flex items-center space-x-2 bg-gray-100 rounded-lg px-4 transition-all duration-300';
+    return this.isScrolled() ? `${base} py-2` : `${base} py-2.5`;
+  }
+
+  searchInputClasses() {
+    return 'flex-1 bg-transparent outline-none text-sm text-gray-700 placeholder-gray-400';
+  }
+
+  cartButtonClasses() {
+    const base =
+      'relative flex items-center text-gray-600 hover:text-blue-600 transition-all duration-300 rounded-lg';
     return this.isScrolled()
-      ? `${base} px-4 py-2 text-sm`
-      : `${base} px-6 py-3 font-semibold text-base`;
+      ? `${base} px-3 py-2 hover:bg-blue-50`
+      : `${base} px-4 py-2 hover:bg-blue-50`;
   }
 }
