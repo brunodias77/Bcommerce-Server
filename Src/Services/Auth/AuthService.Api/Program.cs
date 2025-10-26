@@ -6,6 +6,29 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        // Configurar DateTime para sempre assumir UTC quando não especificado
+        options.JsonSerializerOptions.Converters.Add(new AuthService.Api.Converters.DateTimeConverter());
+        options.JsonSerializerOptions.Converters.Add(new AuthService.Api.Converters.NullableDateTimeConverter());
+    });
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+// Configuração de CORS para aplicações frontend
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontendApps", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200", "http://localhost:3000") // Angular e React
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
+    });
+});
+
 // Configuração da camada de infraestrutura
 builder.Services.AddInfrastructure(builder.Configuration);
 
@@ -15,20 +38,23 @@ builder.Services.AddApplication(builder.Configuration);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-// 1. HTTPS Redirection - SEMPRE PRIMEIRO para forçar HTTPS
+// 1. CORS - DEVE VIR ANTES de outros middlewares
+app.UseCors("AllowFrontendApps");
+
+// 2. HTTPS Redirection - SEMPRE PRIMEIRO para forçar HTTPS
 app.UseHttpsRedirection();
 
-// 2. Swagger - apenas em desenvolvimento
+// 3. Swagger - apenas em desenvolvimento
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-// 3. BuildingBlocks Middlewares - segurança, validação, monitoramento
+// 4. BuildingBlocks Middlewares - segurança, validação, monitoramento
 app.UseBuildingBlocksMiddleware(app.Environment.IsDevelopment());
 
-// 4. Middleware de autenticação e autorização - APÓS os middlewares de segurança
+// 5. Middleware de autenticação e autorização - APÓS os middlewares de segurança
 app.UseAuthentication();
 app.UseAuthorization();
 
