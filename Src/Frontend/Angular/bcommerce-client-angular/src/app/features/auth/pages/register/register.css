@@ -1,0 +1,61 @@
+/* Animações para transições suaves */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Aplicar animação ao formulário */
+form {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Estilização para o campo de data */
+input[type="date"] {
+  appearance: none;
+  -webkit-appearance: none;
+  color: #4B5563;
+  font-family: inherit;
+  font-size: 0.875rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+/* Estilização para o campo de data no Firefox */
+input[type="date"]::-moz-calendar-picker-indicator {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="15" viewBox="0 0 24 24"><path fill="%236B7280" d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z"/></svg>');
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+/* Estilização para o campo de data no Chrome */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="15" viewBox="0 0 24 24"><path fill="%236B7280" d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z"/></svg>');
+  cursor: pointer;
+}
+
+/* Efeito de foco para inputs */
+input:focus {
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+/* Efeito de hover para botões */
+button:hover:not(:disabled) {
+  box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.1), 0 2px 4px -1px rgba(99, 102, 241, 0.06);
+}
+
+/* Efeito de clique para botões */
+button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+/* Animação para mensagens de erro */
+p.text-red-600 {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Estilização para o ícone de mostrar/ocultar senha */
+button.absolute svg {
+  transition: color 0.2s ease;
+}
