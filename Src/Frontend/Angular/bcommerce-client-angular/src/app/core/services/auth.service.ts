@@ -1,6 +1,7 @@
 import { Injectable, inject, signal, computed, effect } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
 import { 
   User, 
   LoginRequest, 
@@ -64,17 +65,19 @@ export class AuthService {
     this._isLoading.set(true);
     
     try {
-      const response = await this.http.post<ApiResponse<AuthResponse>>(
-        `${this.API_BASE_URL}/login`,
-        credentials
-      ).toPromise();
+      const response = await firstValueFrom(
+        this.http.post<ApiResponse<AuthResponse>>(
+          `${this.API_BASE_URL}/login`,
+          credentials
+        )
+      );
 
       if (response?.success && response.data) {
         this._currentUser.set(response.data.user);
         this._tokens.set(response.data.tokens);
       }
 
-      return response!;
+      return response;
     } catch (error) {
       return this.handleError(error);
     } finally {
@@ -89,17 +92,19 @@ export class AuthService {
     this._isLoading.set(true);
     
     try {
-      const response = await this.http.post<ApiResponse<AuthResponse>>(
-        `${this.API_BASE_URL}/register`,
-        userData
-      ).toPromise();
+      const response = await firstValueFrom(
+        this.http.post<ApiResponse<AuthResponse>>(
+          `${this.API_BASE_URL}/register`,
+          userData
+        )
+      );
 
       if (response?.success && response.data) {
         this._currentUser.set(response.data.user);
         this._tokens.set(response.data.tokens);
       }
 
-      return response!;
+      return response;
     } catch (error) {
       return this.handleError(error);
     } finally {
@@ -117,9 +122,11 @@ export class AuthService {
       const tokens = this._tokens();
       if (tokens) {
         // Opcional: chamar endpoint de logout no backend
-        await this.http.post(`${this.API_BASE_URL}/logout`, {
-          refreshToken: tokens.refreshToken
-        }).toPromise();
+        await firstValueFrom(
+          this.http.post(`${this.API_BASE_URL}/logout`, {
+            refreshToken: tokens.refreshToken
+          })
+        );
       }
     } catch (error) {
       console.warn('Erro ao fazer logout no servidor:', error);
@@ -143,10 +150,12 @@ export class AuthService {
     this._isLoading.set(true);
     
     try {
-      const response = await this.http.post<ApiResponse<AuthTokens>>(
-        `${this.API_BASE_URL}/refresh`,
-        { refreshToken: tokens.refreshToken }
-      ).toPromise();
+      const response = await firstValueFrom(
+        this.http.post<ApiResponse<AuthTokens>>(
+          `${this.API_BASE_URL}/refresh`,
+          { refreshToken: tokens.refreshToken }
+        )
+      );
 
       if (response?.success && response.data) {
         this._tokens.set(response.data);
