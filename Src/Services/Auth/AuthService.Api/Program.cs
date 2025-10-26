@@ -6,13 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers()
-    .AddJsonOptions(options =>
-    {
-        // Configurar DateTime para sempre assumir UTC quando não especificado
-        options.JsonSerializerOptions.Converters.Add(new AuthService.Api.Converters.DateTimeConverter());
-        options.JsonSerializerOptions.Converters.Add(new AuthService.Api.Converters.NullableDateTimeConverter());
-    });
+builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

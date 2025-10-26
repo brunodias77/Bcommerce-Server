@@ -30,8 +30,7 @@ volumes:
     name: bcommerce-notification-db-data
   events-db-data:
     name: bcommerce-events-db-data
-  pgadmin-data:
-    name: bcommerce-pgadmin-data
+
 
 services:
   # =============================================
@@ -301,49 +300,6 @@ services:
           cpus: '0.5'
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${EVENTS_DB_USER:-events_user} -d ${EVENTS_DB_NAME:-events_db}"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 60s
-
-  # =============================================
-  # PGADMIN - ADMINISTRAÇÃO DOS BANCOS
-  # =============================================
-  pgadmin:
-    image: dpage/pgadmin4:latest
-    container_name: bcommerce-pgadmin
-    restart: unless-stopped
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@bcommerce.local}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin_password_2024}
-      PGADMIN_CONFIG_SERVER_MODE: 'False'
-      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: 'False'
-    ports:
-      - "${PGADMIN_PORT:-8080}:80"
-    volumes:
-      - pgadmin-data:/var/lib/pgadmin
-      - ./pgadmin/servers.json:/pgadmin4/servers.json:ro
-    networks:
-      - bcommerce-network
-    depends_on:
-      - auth-db
-      - user-db
-      - catalog-db
-      - cart-db
-      - promotion-db
-      - order-db
-      - notification-db
-      - events-db
-    deploy:
-      resources:
-        limits:
-          memory: 512M
-          cpus: '0.5'
-        reservations:
-          memory: 256M
-          cpus: '0.25'
-    healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:80/misc/ping"]
       interval: 30s
       timeout: 10s
       retries: 3

@@ -18,7 +18,6 @@ public class AuthDbContext : IdentityDbContext<User>
     // DbSets para as entidades adicionais
     public DbSet<RefreshToken> RefreshTokens { get; set; }
     public DbSet<SecurityLog> SecurityLogs { get; set; }
-    public DbSet<AccountToken> AccountTokens { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -28,6 +27,5 @@ public class AuthDbContext : IdentityDbContext<User>
         builder.ApplyConfiguration(new UserConfiguration());
         builder.ApplyConfiguration(new RefreshTokenConfiguration());
         builder.ApplyConfiguration(new SecurityLogConfiguration());
-        builder.ApplyConfiguration(new AccountTokenConfiguration());
     }
 }

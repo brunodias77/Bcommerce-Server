@@ -86,6 +86,6 @@ public static class InfraDependencyInjection
     {
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
-        services.AddScoped<IAccountTokenRepository, AccountTokenRepository>();
+        //services.AddScoped<IAccountTokenRepository, AccountTokenRepository>();
     }
 }
