@@ -1,6 +1,6 @@
 namespace BuildingBlocks.MessageBus;
 
-public interface ICommand
+public class Command
 {
     
 }
