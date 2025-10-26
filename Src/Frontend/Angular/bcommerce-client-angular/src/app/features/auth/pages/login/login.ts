@@ -91,8 +91,8 @@ export class Login {
       const response = await this.authService.login(loginData);
 
       if (response.success) {
-        // Redirecionar para dashboard ou página inicial
-        await this.router.navigate(['/dashboard']);
+        // Redirecionar para perfil do usuário
+        await this.router.navigate(['/profile']);
       } else {
         this.errorMessage.set(response.message || 'Erro ao fazer login');
       }

@@ -102,19 +102,6 @@
 .bg-animated {
   background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
   background-size: 400% 400%;
-  animation: gradient 15s ease infinite;
-}
-
-@keyframes gradient {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
 }
 
 /* Efeitos de foco melhorados */
@@ -125,28 +112,6 @@
 .focus-ring:focus {
   outline: none;
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-}
-
-/* Animação de erro */
-@keyframes shake {
-  0%, 100% {
-    transform: translateX(0);
-  }
-  10%, 30%, 50%, 70%, 90% {
-    transform: translateX(-5px);
-  }
-  20%, 40%, 60%, 80% {
-    transform: translateX(5px);
-  }
-}
-
-.animate-shake {
-  animation: shake 0.5s ease-in-out;
-}
-
-/* Estilo para mensagens de erro */
-.error-message {
-  animation: fade-in 0.3s ease-out;
 }
 
 /* Responsividade melhorada */

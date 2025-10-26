@@ -12,13 +12,13 @@
     </div>
 
     <!-- Formulário de Login -->
-    <div class="bg-white rounded-2xl shadow-xl p-8">
+    <div class="bg-white rounded-2xl shadow-xl p-8 animate-fade-in">
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-6">
         
         <!-- Mensagem de Erro Global -->
         <div *ngIf="errorMessage()" 
-             class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex items-center justify-between animate-fade-in">
-          <div class="flex items-center">
+             class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex items-center justify-between animate-shake">
+          <div class="flex items-center animate-slide-in">
             <svg class="h-5 w-5 text-red-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
@@ -32,7 +32,7 @@
         </div>
 
         <!-- Campo Email -->
-        <div class="space-y-2">
+        <div class="space-y-2 animate-slide-in">
           <label for="email" class="block text-sm font-medium text-gray-700">
             Email
           </label>
@@ -62,7 +62,7 @@
         </div>
 
         <!-- Campo Senha -->
-        <div class="space-y-2">
+        <div class="space-y-2 animate-slide-in">
           <label for="password" class="block text-sm font-medium text-gray-700">
             Senha
           </label>
@@ -105,7 +105,7 @@
         </div>
 
         <!-- Opções adicionais -->
-        <div class="flex items-center justify-between">
+        <div class="flex items-center justify-between animate-fade-in">
           <div class="flex items-center">
             <input
               id="remember-me"
@@ -127,8 +127,7 @@
         <!-- Botão de Login -->
         <button
           type="submit"
-          [disabled]="!isFormValid()"
-          class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 animate-bounce-in"
           [class.bg-indigo-600]="isFormValid()"
           [class.hover:bg-indigo-700]="isFormValid()"
           [class.bg-gray-300]="!isFormValid()"
@@ -150,7 +149,7 @@
         </button>
 
         <!-- Link para Registro -->
-        <div class="text-center">
+        <div class="text-center animate-fade-in">
           <p class="text-sm text-gray-600">
             Não tem uma conta?
             <a routerLink="/auth/register" class="font-medium text-indigo-600 hover:text-indigo-500 transition-colors duration-200">

@@ -61,20 +61,40 @@ export class AuthService {
   /**
    * Realiza login do usuário
    */
-  async login(credentials: LoginRequest): Promise<ApiResponse<AuthResponse>> {
+  async login(credentials: LoginRequest): Promise<ApiResponse<any>> {
     this._isLoading.set(true);
     
     try {
       const response = await firstValueFrom(
-        this.http.post<ApiResponse<AuthResponse>>(
+        this.http.post<ApiResponse<any>>(
           `${this.API_BASE_URL}/login`,
           credentials
         )
       );
 
       if (response?.success && response.data) {
-        this._currentUser.set(response.data.user);
-        this._tokens.set(response.data.tokens);
+        // O backend retorna os dados diretamente em response.data
+        const loginData = response.data;
+        
+        // Criar objeto User a partir dos dados retornados
+        const user: User = {
+          id: loginData.userId,
+          fullName: loginData.fullName,
+          email: loginData.email,
+          phone: '', // Não retornado no login
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        };
+
+        // Criar objeto AuthTokens a partir dos dados retornados
+        const tokens: AuthTokens = {
+          accessToken: loginData.accessToken,
+          refreshToken: loginData.refreshToken,
+          expiresIn: loginData.expiresIn
+        };
+
+        this._currentUser.set(user);
+        this._tokens.set(tokens);
       }
 
       return response;
