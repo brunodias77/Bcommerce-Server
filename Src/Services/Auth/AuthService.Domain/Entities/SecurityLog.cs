@@ -33,7 +33,12 @@ public class SecurityLog
     /// <summary>
     /// Data de criação do log
     /// </summary>
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    private DateTime _createdAt = DateTime.UtcNow;
+    public DateTime CreatedAt 
+    { 
+        get => _createdAt; 
+        set => _createdAt = value.Kind == DateTimeKind.Utc ? value : value.ToUniversalTime(); 
+    }
 
     // Relacionamento com User (opcional)
     public virtual User? User { get; set; }

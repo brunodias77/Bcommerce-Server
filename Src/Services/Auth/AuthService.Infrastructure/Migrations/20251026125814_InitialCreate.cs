@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,6 +12,9 @@ namespace AuthService.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            // Criar extensão UUID para PostgreSQL
+            migrationBuilder.Sql("CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";");
+
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -74,30 +77,6 @@ namespace AuthService.Infrastructure.Migrations
                         name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "account_tokens",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuid_generate_v4()", comment: "Identificador único do token"),
-                    UserId = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: false, comment: "ID do usuário (mesmo ID do AspNetUsers.Id)"),
-                    Token = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false, comment: "Valor único do token (ex: hash SHA256)"),
-                    TokenType = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false, comment: "Tipo do token (ACCOUNT_ACTIVATION / PASSWORD_RESET)"),
-                    ExpiresAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Data e hora de expiração do token"),
-                    UsedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true, comment: "Data e hora em que o token foi utilizado"),
-                    RevokedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true, comment: "Data e hora em que o token foi revogado (se aplicável)"),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP", comment: "Data de criação do registro")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_account_tokens", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_account_tokens_users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -232,17 +211,6 @@ namespace AuthService.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "idx_account_tokens_token",
-                table: "account_tokens",
-                column: "Token",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "idx_account_tokens_user_id",
-                table: "account_tokens",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
                 column: "RoleId");
@@ -315,9 +283,6 @@ namespace AuthService.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "account_tokens");
-
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 

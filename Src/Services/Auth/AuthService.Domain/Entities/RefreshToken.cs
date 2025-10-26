@@ -23,17 +23,32 @@ public class RefreshToken
     /// <summary>
     /// Data e hora de expiração
     /// </summary>
-    public DateTime ExpiresAt { get; set; }
+    private DateTime _expiresAt;
+    public DateTime ExpiresAt 
+    { 
+        get => _expiresAt; 
+        set => _expiresAt = value.Kind == DateTimeKind.Utc ? value : value.ToUniversalTime(); 
+    }
 
     /// <summary>
     /// Data de criação
     /// </summary>
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    private DateTime _createdAt = DateTime.UtcNow;
+    public DateTime CreatedAt 
+    { 
+        get => _createdAt; 
+        set => _createdAt = value.Kind == DateTimeKind.Utc ? value : value.ToUniversalTime(); 
+    }
 
     /// <summary>
     /// Data de revogação (caso o token seja invalidado)
     /// </summary>
-    public DateTime? RevokedAt { get; set; }
+    private DateTime? _revokedAt;
+    public DateTime? RevokedAt 
+    { 
+        get => _revokedAt; 
+        set => _revokedAt = value?.Kind == DateTimeKind.Utc ? value : value?.ToUniversalTime(); 
+    }
 
     /// <summary>
     /// Campo calculado que indica se o token está ativo
