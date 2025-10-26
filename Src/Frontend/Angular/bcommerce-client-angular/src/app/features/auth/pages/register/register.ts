@@ -27,12 +27,34 @@ export class Register {
   registerForm: FormGroup;
 
   // Computed para validações
-  isFormValid = computed(() => (this.registerForm?.valid || false) && this.passwordsMatch());
+  isFormValid = computed(() => {
+    if (!this.registerForm) {
+      console.log('🔍 Form not initialized yet');
+      return false;
+    }
+    
+    const formValid = this.registerForm.valid;
+    const passwordsMatch = this.passwordsMatch();
+    const result = formValid && passwordsMatch;
+    
+    console.log('🔍 Debug isFormValid:', {
+      formValid,
+      passwordsMatch,
+      result,
+      formErrors: this.registerForm.errors,
+      formStatus: this.registerForm.status,
+      allFieldsStatus: this.getAllFieldsStatus()
+    });
+    
+    return result;
+  });
   
   passwordsMatch = computed(() => {
     const password = this.registerForm?.get('password')?.value;
     const confirmPassword = this.registerForm?.get('confirmPassword')?.value;
-    return password === confirmPassword;
+    const match = password === confirmPassword;
+    console.log('🔍 Debug passwordsMatch:', { password, confirmPassword, match });
+    return match;
   });
 
   constructor() {
@@ -45,7 +67,7 @@ export class Register {
       ]],
       confirmPassword: ['', [Validators.required]],
       fullName: ['', [Validators.required, Validators.minLength(2)]],
-      phone: ['', [this.phoneValidator]],
+      phone: [''], // Campo opcional sem validação
       birthDate: ['']
     });
   }
@@ -66,10 +88,20 @@ export class Register {
   // Validador personalizado para telefone
   private phoneValidator(control: any) {
     const value = control.value;
-    if (!value) return null; // Campo opcional
+    console.log('🔍 Debug phoneValidator:', { value, isEmpty: !value });
     
-    const phoneRegex = /^\(\d{2}\)\s\d{4,5}-\d{4}$/;
-    return phoneRegex.test(value) ? null : { invalidPhone: true };
+    // Campo opcional - se estiver vazio, é válido
+    if (!value || value.trim() === '') {
+      console.log('📞 Phone field is empty - valid');
+      return null;
+    }
+    
+    // Regex mais flexível para telefone
+    const phoneRegex = /^\(\d{2}\)\s?\d{4,5}-?\d{4}$/;
+    const isValid = phoneRegex.test(value);
+    console.log('📞 Phone validation:', { value, isValid, regex: phoneRegex.toString() });
+    
+    return isValid ? null : { invalidPhone: true };
   }
 
   // Alternar visibilidade da senha
@@ -163,5 +195,21 @@ export class Register {
     Object.keys(this.registerForm.controls).forEach(key => {
       this.registerForm.get(key)?.markAsTouched();
     });
+  }
+
+  // Método auxiliar para debug
+  private getAllFieldsStatus() {
+    const fields = ['email', 'password', 'confirmPassword', 'fullName', 'phone', 'birthDate'];
+    const status: any = {};
+    fields.forEach(field => {
+      const control = this.registerForm.get(field);
+      status[field] = {
+        value: control?.value,
+        valid: control?.valid,
+        errors: control?.errors,
+        touched: control?.touched
+      };
+    });
+    return status;
   }
 }

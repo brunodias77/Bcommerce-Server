@@ -21,7 +21,7 @@ export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly router = inject(Router);
   
-  private readonly API_BASE_URL = 'http://localhost:5000/api/auth';
+  private readonly API_BASE_URL = 'http://localhost:5050/api/auth';
   private readonly TOKEN_KEY = 'auth_tokens';
   private readonly USER_KEY = 'current_user';
 
