@@ -66,10 +66,10 @@ export class Header {
 
   // Classes computadas - Estilo E-commerce
   headerClasses() {
-    const base = 'fixed z-50 transition-all duration-300 ease-out bg-white shadow-md';
+    const base = 'fixed z-50 transition-all duration-300 ease-out shadow-md';
     return this.isScrolled()
-      ? `${base} left-4 right-4 top-4 rounded-2xl`
-      : `${base} left-0 right-0 top-0 rounded-none`;
+      ? `${base} left-4 right-4 top-4 rounded-2xl bg-white/30 backdrop-blur-md`
+      : `${base} left-0 right-0 top-0 rounded-none bg-white`;
   }
 
   containerClasses() {
