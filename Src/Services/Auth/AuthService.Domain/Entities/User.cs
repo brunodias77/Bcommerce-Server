@@ -21,29 +21,44 @@ public class User : IdentityUser
     /// <summary>
     /// Data de nascimento (opcional)
     /// </summary>
-    public DateTime? BirthDate { get; set; }
+    private DateTime? _birthDate;
+    public DateTime? BirthDate 
+    { 
+        get => _birthDate; 
+        set => _birthDate = value?.Kind == DateTimeKind.Utc ? value : value?.ToUniversalTime(); 
+    }
 
     /// <summary>
     /// Data de criação do registro
     /// </summary>
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    private DateTime _createdAt = DateTime.UtcNow;
+    public DateTime CreatedAt 
+    { 
+        get => _createdAt; 
+        set => _createdAt = value.Kind == DateTimeKind.Utc ? value : value.ToUniversalTime(); 
+    }
 
     /// <summary>
     /// Data da última atualização
     /// </summary>
-    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+    private DateTime _updatedAt = DateTime.UtcNow;
+    public DateTime UpdatedAt 
+    { 
+        get => _updatedAt; 
+        set => _updatedAt = value.Kind == DateTimeKind.Utc ? value : value.ToUniversalTime(); 
+    }
 
     /// <summary>
     /// Último login do usuário (opcional)
     /// </summary>
-    public DateTime? LastLoginAt { get; set; }
+    private DateTime? _lastLoginAt;
+    public DateTime? LastLoginAt 
+    { 
+        get => _lastLoginAt; 
+        set => _lastLoginAt = value?.Kind == DateTimeKind.Utc ? value : value?.ToUniversalTime(); 
+    }
 
     // Relacionamentos com outras entidades
     public virtual ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
     public virtual ICollection<SecurityLog> SecurityLogs { get; set; } = new List<SecurityLog>();
-    
-    /// <summary>
-    /// Tokens de conta (ativação, redefinição de senha) associados ao usuário
-    /// </summary>
-    public virtual ICollection<AccountToken> AccountTokens { get; set; } = new List<AccountToken>();
 }

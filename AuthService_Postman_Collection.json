@@ -1,0 +1,936 @@
+{
+	"info": {
+		"_postman_id": "auth-service-collection-2024",
+		"name": "AuthService API Collection",
+		"description": "Coleção completa dos endpoints do AuthService para autenticação e gerenciamento de usuários",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"description": "Endpoints de autenticação e gerenciamento de usuários",
+			"item": [
+				{
+					"name": "Registrar Usuário",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"firstName\": \"João\",\n  \"lastName\": \"Silva\",\n  \"email\": \"joao.silva@email.com\",\n  \"password\": \"MinhaSenh@123\",\n  \"confirmPassword\": \"MinhaSenh@123\",\n  \"phone\": \"+5511999999999\",\n  \"birthDate\": \"1990-05-15\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						},
+						"description": "Registra um novo usuário no sistema. Requer dados válidos incluindo email único (máximo 256 caracteres), senha forte (mínimo 8 caracteres) e confirmação de senha."
+					},
+					"response": [
+						{
+							"name": "Sucesso - 201",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"firstName\": \"João\",\n  \"lastName\": \"Silva\",\n  \"email\": \"joao.silva@email.com\",\n  \"password\": \"MinhaSenh@123\",\n  \"confirmPassword\": \"MinhaSenh@123\",\n  \"phone\": \"+5511999999999\",\n  \"birthDate\": \"1990-05-15\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/auth/register",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"register"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"data\": {\n    \"userId\": \"guid-do-usuario\",\n    \"email\": \"joao.silva@email.com\",\n    \"firstName\": \"João\",\n    \"lastName\": \"Silva\"\n  },\n  \"message\": \"Usuário registrado com sucesso\",\n  \"errors\": []\n}"
+						}
+					]
+				},
+				{
+					"name": "Confirmar Email",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/confirm-email?token={{confirmationToken}}&userId={{userId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"confirm-email"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "{{confirmationToken}}",
+									"description": "Token de confirmação enviado por email"
+								},
+								{
+									"key": "userId",
+									"value": "{{userId}}",
+									"description": "ID do usuário (GUID)"
+								}
+							]
+						},
+						"description": "Ativa uma conta de usuário através do token de confirmação enviado por email. Requer token válido e userId."
+					},
+					"response": [
+						{
+							"name": "Sucesso - 200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/auth/confirm-email?token=exemplo-token&userId=exemplo-guid",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"confirm-email"
+									],
+									"query": [
+										{
+											"key": "token",
+											"value": "exemplo-token"
+										},
+										{
+											"key": "userId",
+											"value": "exemplo-guid"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"data\": {\n    \"userId\": \"guid-do-usuario\",\n    \"email\": \"joao.silva@email.com\",\n    \"isActivated\": true\n  },\n  \"message\": \"Conta ativada com sucesso\",\n  \"errors\": []\n}"
+						}
+					]
+				},
+				{
+					"name": "Reenviar Token de Ativação",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"joao.silva@email.com\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/resend-activation-token",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"resend-activation-token"
+							]
+						},
+						"description": "Reenvia o token de ativação para o email do usuário. Email deve ter máximo 256 caracteres. Útil quando o email original não foi recebido ou expirou."
+					},
+					"response": [
+						{
+							"name": "Sucesso - 200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"joao.silva@email.com\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/auth/resend-activation-token",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"resend-activation-token"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"data\": {\n    \"email\": \"joao.silva@email.com\",\n    \"tokenSent\": true\n  },\n  \"message\": \"Token de ativação reenviado com sucesso\",\n  \"errors\": []\n}"
+						}
+					]
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"joao.silva@email.com\",\n  \"password\": \"MinhaSenh@123\",\n  \"rememberMe\": true\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						},
+						"description": "Autentica um usuário no sistema. Requer email válido (máximo 256 caracteres) e senha (mínimo 8 caracteres). Retorna tokens de acesso (JWT) e refresh token para manter a sessão."
+					},
+					"response": [
+						{
+							"name": "Sucesso - 200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"joao.silva@email.com\",\n  \"password\": \"MinhaSenh@123\",\n  \"rememberMe\": true\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/auth/login",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"data\": {\n    \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\",\n    \"refreshToken\": \"refresh-token-guid\",\n    \"expiresIn\": 3600,\n    \"user\": {\n      \"id\": \"guid-do-usuario\",\n      \"email\": \"joao.silva@email.com\",\n      \"firstName\": \"João\",\n      \"lastName\": \"Silva\"\n    }\n  },\n  \"message\": \"Login realizado com sucesso\",\n  \"errors\": []\n}"
+						}
+					]
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/logout",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"logout"
+							]
+						},
+						"description": "Realiza logout do usuário autenticado, revogando os tokens de acesso e refresh token."
+					},
+					"response": [
+						{
+							"name": "Sucesso - 200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{accessToken}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/auth/logout",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"logout"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"data\": {\n    \"message\": \"Logout realizado com sucesso\"\n  },\n  \"message\": \"Usuário deslogado com sucesso\",\n  \"errors\": []\n}"
+						}
+					]
+				},
+				{
+					"name": "Esqueci Minha Senha",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"joao.silva@email.com\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/forgot-password",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"forgot-password"
+							]
+						},
+						"description": "Solicita redefinição de senha enviando um token por email para o usuário. Email deve ter máximo 256 caracteres."
+					},
+					"response": [
+						{
+							"name": "Sucesso - 200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"joao.silva@email.com\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/auth/forgot-password",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"forgot-password"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"data\": {\n    \"email\": \"joao.silva@email.com\",\n    \"tokenSent\": true\n  },\n  \"message\": \"Token de redefinição enviado com sucesso\",\n  \"errors\": []\n}"
+						}
+					]
+				},
+				{
+					"name": "Redefinir Senha",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"joao.silva@email.com\",\n  \"token\": \"reset-token-aqui\",\n  \"newPassword\": \"NovaSenha@123\",\n  \"confirmPassword\": \"NovaSenha@123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/reset-password",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"reset-password"
+							]
+						},
+						"description": "Redefine a senha do usuário usando o token enviado por email. Nova senha deve ter mínimo 8 caracteres."
+					},
+					"response": [
+						{
+							"name": "Sucesso - 200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"joao.silva@email.com\",\n  \"token\": \"reset-token-aqui\",\n  \"newPassword\": \"NovaSenha@123\",\n  \"confirmPassword\": \"NovaSenha@123\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/auth/reset-password",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"reset-password"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"data\": {\n    \"success\": true\n  },\n  \"message\": \"Senha redefinida com sucesso\",\n  \"errors\": []\n}"
+						}
+					]
+				},
+				{
+					"name": "Alterar Senha",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"currentPassword\": \"MinhaSenh@123\",\n  \"newPassword\": \"NovaSenha@456\",\n  \"confirmPassword\": \"NovaSenha@456\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/change-password",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"change-password"
+							]
+						},
+						"description": "Altera a senha do usuário autenticado. Requer a senha atual para validação. Nova senha deve ter mínimo 8 caracteres."
+					},
+					"response": [
+						{
+							"name": "Sucesso - 200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{accessToken}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"currentPassword\": \"MinhaSenh@123\",\n  \"newPassword\": \"NovaSenha@456\",\n  \"confirmPassword\": \"NovaSenha@456\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/auth/change-password",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"change-password"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"data\": {\n    \"success\": true\n  },\n  \"message\": \"Senha alterada com sucesso\",\n  \"errors\": []\n}"
+						}
+					]
+				},
+				{
+					"name": "Renovar Token",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/refresh-token",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"refresh-token"
+							]
+						},
+						"description": "Renova o token de acesso usando o refresh token. Útil para manter a sessão ativa sem fazer login novamente."
+					},
+					"response": [
+						{
+							"name": "Sucesso - 200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/auth/refresh-token",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"refresh-token"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"data\": {\n    \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\",\n    \"refreshToken\": \"new-refresh-token-guid\",\n    \"expiresIn\": 3600\n  },\n  \"message\": \"Token renovado com sucesso\",\n  \"errors\": []\n}"
+						}
+					]
+				},
+				{
+					"name": "Obter Perfil do Usuário",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/profile",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"profile"
+							]
+						},
+						"description": "Obtém o perfil completo do usuário autenticado através do token JWT."
+					},
+					"response": [
+						{
+							"name": "Sucesso - 200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{accessToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/auth/profile",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"profile"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"data\": {\n    \"userId\": \"guid-do-usuario\",\n    \"email\": \"joao.silva@email.com\",\n    \"fullName\": \"João Silva\",\n    \"phone\": \"+5511999999999\",\n    \"birthDate\": \"1990-05-15T00:00:00Z\",\n    \"createdAt\": \"2024-01-01T10:00:00Z\",\n    \"updatedAt\": \"2024-01-15T15:30:00Z\",\n    \"lastLoginAt\": \"2024-01-15T14:00:00Z\",\n    \"emailConfirmed\": true\n  },\n  \"message\": \"Perfil do usuário obtido com sucesso\",\n  \"errors\": []\n}"
+						}
+					]
+				},
+				{
+					"name": "Atualizar Perfil",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"firstName\": \"João\",\n  \"lastName\": \"Silva Santos\",\n  \"phone\": \"+5511888888888\",\n  \"birthDate\": \"1990-05-15\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/profile",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"profile"
+							]
+						},
+						"description": "Atualiza as informações do perfil do usuário autenticado."
+					},
+					"response": [
+						{
+							"name": "Sucesso - 200",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{accessToken}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"firstName\": \"João\",\n  \"lastName\": \"Silva Santos\",\n  \"phone\": \"+5511888888888\",\n  \"birthDate\": \"1990-05-15\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/auth/profile",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"profile"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"data\": {\n    \"userId\": \"guid-do-usuario\",\n    \"fullName\": \"João Silva Santos\",\n    \"phone\": \"+5511888888888\",\n    \"birthDate\": \"1990-05-15T00:00:00Z\",\n    \"updatedAt\": \"2024-01-15T16:00:00Z\"\n  },\n  \"message\": \"Perfil atualizado com sucesso\",\n  \"errors\": []\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Health Check",
+			"description": "Endpoints para verificação de saúde da aplicação",
+			"item": [
+				{
+					"name": "Health Check Básico",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/health",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"health"
+							]
+						},
+						"description": "Endpoint básico de health check que retorna o status geral da aplicação."
+					},
+					"response": [
+						{
+							"name": "Healthy - 200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/health",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"health"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\n  \"status\": \"Healthy\",\n  \"timestamp\": \"2024-01-15T10:30:00Z\",\n  \"application\": \"AuthService.Api\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Health Check Detalhado",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/health/detailed",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"health",
+								"detailed"
+							]
+						},
+						"description": "Endpoint detalhado de health check que retorna informações completas sobre todos os serviços e componentes."
+					},
+					"response": [
+						{
+							"name": "Healthy - 200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/health/detailed",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"health",
+										"detailed"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\n  \"status\": \"Healthy\",\n  \"timestamp\": \"2024-01-15T10:30:00Z\",\n  \"application\": \"AuthService.Api\",\n  \"version\": \"1.0.0.0\",\n  \"environment\": \"Development\",\n  \"totalDuration\": 45.2,\n  \"checks\": [\n    {\n      \"name\": \"database\",\n      \"status\": \"Healthy\",\n      \"description\": \"Database connection check\",\n      \"duration\": 25.1,\n      \"data\": {},\n      \"exception\": null\n    }\n  ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Health Check Database",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/health/database",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"health",
+								"database"
+							]
+						},
+						"description": "Endpoint específico para verificação do status do banco de dados."
+					},
+					"response": [
+						{
+							"name": "Healthy - 200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/health/database",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"health",
+										"database"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\n  \"status\": \"Healthy\",\n  \"component\": \"Database\",\n  \"timestamp\": \"2024-01-15T10:30:00Z\",\n  \"message\": \"Banco de dados está funcionando corretamente\",\n  \"data\": {\n    \"connection_status\": \"Connected\",\n    \"user_count\": 150,\n    \"database_provider\": \"Microsoft.EntityFrameworkCore.SqlServer\"\n  }\n}"
+						}
+					]
+				},
+				{
+					"name": "Health Check Identity",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/health/identity",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"health",
+								"identity"
+							]
+						},
+						"description": "Endpoint específico para verificação do ASP.NET Core Identity."
+					},
+					"response": [
+						{
+							"name": "Healthy - 200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/health/identity",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"health",
+										"identity"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\n  \"status\": \"Healthy\",\n  \"component\": \"Identity\",\n  \"timestamp\": \"2024-01-15T10:30:00Z\",\n  \"message\": \"ASP.NET Core Identity está funcionando corretamente\",\n  \"data\": {\n    \"user_manager_status\": \"Working\",\n    \"user_count\": 150,\n    \"test_query_executed\": true\n  }\n}"
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:5000",
+			"type": "string",
+			"description": "URL base do AuthService API"
+		},
+		{
+			"key": "confirmationToken",
+			"value": "seu-token-de-confirmacao-aqui",
+			"type": "string",
+			"description": "Token de confirmação de email"
+		},
+		{
+			"key": "userId",
+			"value": "guid-do-usuario-aqui",
+			"type": "string",
+			"description": "ID do usuário (GUID)"
+		},
+		{
+			"key": "accessToken",
+			"value": "",
+			"type": "string",
+			"description": "Token JWT de acesso (será preenchido automaticamente após login)"
+		},
+		{
+			"key": "refreshToken",
+			"value": "",
+			"type": "string",
+			"description": "Refresh token para renovação do token de acesso"
+		}
+	]
+}
