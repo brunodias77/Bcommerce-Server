@@ -39,7 +39,11 @@
     </div>
 
     <!-- Actions: Favoritos, Conta e Carrinho -->
-    <div class="flex items-center space-x-4">
+    <div class="flex items-center justify-center">
+      <!-- Conta -->
+      <button class="hidden md:block p-2 text-gray-600 hover:text-blue-600 transition-colors">
+        <app-user-icon [size]="24" color="currentColor"></app-user-icon>
+      </button>
       <!-- Favoritos -->
       <button
         class="hidden md:block p-2 text-gray-600 hover:text-red-500 transition-colors relative"
@@ -51,30 +55,20 @@
         >
       </button>
 
-      <!-- Conta -->
-      <button class="hidden md:block p-2 text-gray-600 hover:text-blue-600 transition-colors">
-        <app-user-icon [size]="24" color="currentColor"></app-user-icon>
-      </button>
-
       <!-- Carrinho -->
       <button [class]="cartButtonClasses()">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-          />
-        </svg>
+        <app-cart-icon [size]="24" color="currentColor"></app-cart-icon>
         <span
           class="absolute -top-1 -right-1 bg-blue-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-semibold"
           >5</span
         >
-        <span class="hidden lg:inline ml-2 font-medium">R$ 299,90</span>
       </button>
 
       <!-- Mobile Menu Button -->
-      <button class="md:hidden p-2 text-gray-600 hover:text-gray-900">
+      <button
+        class="md:hidden p-2 text-gray-600 hover:text-gray-900 transition-colors"
+        (click)="toggleMobileMenu()"
+      >
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
             stroke-linecap="round"
@@ -103,6 +97,75 @@
         placeholder="Buscar produtos..."
         class="flex-1 bg-transparent outline-none text-sm text-gray-700 placeholder-gray-400"
       />
+    </div>
+  </div>
+
+  <!-- Menu Mobile -->
+  <div
+    class="md:hidden overflow-hidden transition-all duration-300 ease-in-out bg-white border-t border-gray-200"
+    [class.max-h-0]="!isMobileMenuOpen()"
+    [class.max-h-96]="isMobileMenuOpen()"
+    [class.opacity-0]="!isMobileMenuOpen()"
+    [class.opacity-50]="isMobileMenuOpen()"
+  >
+    <div class="px-4 py-4 space-y-4">
+      <!-- Navegação Mobile -->
+      <nav class="space-y-3">
+        <a
+          href="#"
+          class="block py-2 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors font-medium"
+          (click)="closeMobileMenu()"
+        >
+          Novidades
+        </a>
+        <a
+          href="#"
+          class="block py-2 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors font-medium"
+          (click)="closeMobileMenu()"
+        >
+          Masculino
+        </a>
+        <a
+          href="#"
+          class="block py-2 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors font-medium"
+          (click)="closeMobileMenu()"
+        >
+          Feminino
+        </a>
+        <a
+          href="#"
+          class="block py-2 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors font-medium"
+          (click)="closeMobileMenu()"
+        >
+          Ofertas
+        </a>
+      </nav>
+
+      <!-- Divisor -->
+      <div class="border-t border-gray-200 my-4"></div>
+
+      <!-- Ações Mobile: Favoritos e Conta -->
+      <div class="space-y-3">
+        <button
+          class="flex items-center w-full py-2 px-3 text-gray-700 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+          (click)="closeMobileMenu()"
+        >
+          <app-heart-icon [size]="20" color="currentColor" customClass="mr-3"></app-heart-icon>
+          <span class="font-medium">Favoritos</span>
+          <span
+            class="ml-auto bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-semibold"
+            >3</span
+          >
+        </button>
+
+        <button
+          class="flex items-center w-full py-2 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+          (click)="closeMobileMenu()"
+        >
+          <app-user-icon [size]="20" color="currentColor" customClass="mr-3"></app-user-icon>
+          <span class="font-medium">Minha Conta</span>
+        </button>
+      </div>
     </div>
   </div>
 </header>

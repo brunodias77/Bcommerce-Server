@@ -1,10 +1,11 @@
 import { Component, HostListener, signal } from '@angular/core';
 import { UserIcon } from '../../icons/user-icon/user-icon';
 import { HeartIcon } from '../../icons/heart-icon/heart-icon';
+import { CartIcon } from '../../icons/cart-icon/cart-icon';
 
 @Component({
   selector: 'app-header',
-  imports: [UserIcon, HeartIcon],
+  imports: [UserIcon, HeartIcon, CartIcon],
   templateUrl: './header.html',
   styleUrl: './header.css',
 })
@@ -12,53 +13,8 @@ export class Header {
   // Signal para controlar o estado do scroll
   isScrolled = signal(false);
 
-  // Dados de exemplo para produtos
-  contentItems = [
-    {
-      id: 1,
-      title: 'Camiseta Premium',
-      description: 'Camiseta 100% algodão com design exclusivo e alta qualidade.',
-      price: 89.9,
-    },
-    {
-      id: 2,
-      title: 'Tênis Esportivo',
-      description: 'Tênis confortável e moderno para todas as ocasiões.',
-      price: 249.9,
-    },
-    {
-      id: 3,
-      title: 'Jaqueta Jeans',
-      description: 'Jaqueta clássica em jeans premium com acabamento impecável.',
-      price: 199.9,
-    },
-    {
-      id: 4,
-      title: 'Relógio Digital',
-      description: 'Relógio moderno com múltiplas funcionalidades e design elegante.',
-      price: 159.9,
-    },
-    {
-      id: 5,
-      title: 'Mochila Urbana',
-      description: 'Mochila versátil com compartimentos organizados e material resistente.',
-      price: 129.9,
-    },
-    {
-      id: 6,
-      title: 'Óculos de Sol',
-      description: 'Óculos com proteção UV e design contemporâneo.',
-      price: 179.9,
-    },
-  ];
-
-  scrollContent = [
-    'Aproveite nossas ofertas especiais! Descontos de até 50% em produtos selecionados.',
-    'Frete grátis para compras acima de R$ 199. Entrega rápida e segura em todo Brasil.',
-    'Novidades toda semana! Cadastre-se e receba em primeira mão nossas promoções.',
-    'Pagamento facilitado em até 12x sem juros. Aceitamos todos os cartões.',
-    'Satisfação garantida ou seu dinheiro de volta. 30 dias para trocas e devoluções.',
-  ];
+  // Signal para controlar o estado do menu mobile
+  isMobileMenuOpen = signal(false);
 
   @HostListener('window:scroll', [])
   onWindowScroll() {
@@ -70,7 +26,7 @@ export class Header {
   headerClasses() {
     const base = 'fixed z-50 transition-all duration-300 ease-out shadow-md';
     return this.isScrolled()
-      ? `${base} left-4 right-4 top-4 rounded-2xl bg-white/30 backdrop-blur-md`
+      ? `${base} left-4 right-4 top-4 rounded-2xl bg-white/50 backdrop-blur-md`
       : `${base} left-0 right-0 top-0 rounded-none bg-white`;
   }
 
@@ -113,10 +69,17 @@ export class Header {
   }
 
   cartButtonClasses() {
-    const base =
-      'relative flex items-center text-gray-600 hover:text-blue-600 transition-all duration-300 rounded-lg';
-    return this.isScrolled()
-      ? `${base} px-3 py-2 hover:bg-blue-50`
-      : `${base} px-4 py-2 hover:bg-blue-50`;
+    const base = 'relative flex items-center text-gray-600  transition-all duration-300 rounded-lg';
+    return this.isScrolled() ? `${base} px-2 py-2 ` : `${base} px-3 py-2 `;
+  }
+
+  // Função para alternar o estado do menu mobile
+  toggleMobileMenu() {
+    this.isMobileMenuOpen.set(!this.isMobileMenuOpen());
+  }
+
+  // Função para fechar o menu mobile
+  closeMobileMenu() {
+    this.isMobileMenuOpen.set(false);
   }
 }
