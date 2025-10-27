@@ -1,0 +1,182 @@
+<footer class="footer-gradient text-gray-300">
+  <!-- Seção Principal do Footer -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="footer-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      
+      <!-- Seção Sobre a Empresa -->
+      <div class="footer-section space-y-4 transition-all duration-300">
+        <h3 class="section-title">Sobre a Empresa</h3>
+        <ul class="space-y-2">
+          <li *ngFor="let link of aboutLinks">
+            <a [routerLink]="link.route" 
+               class="footer-link text-gray-300 hover:text-white text-sm">
+              {{ link.label }}
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Seção Atendimento ao Cliente -->
+      <div class="footer-section space-y-4 transition-all duration-300">
+        <h3 class="section-title">Atendimento ao Cliente</h3>
+        <ul class="space-y-2">
+          <li *ngFor="let link of customerServiceLinks">
+            <a [routerLink]="link.route" 
+               class="footer-link text-gray-300 hover:text-white text-sm">
+              {{ link.label }}
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Seção Categorias de Produtos -->
+      <div class="footer-section space-y-4 transition-all duration-300">
+        <h3 class="section-title">Categorias</h3>
+        <ul class="space-y-2">
+          <li *ngFor="let link of categoryLinks">
+            <a [routerLink]="link.route" 
+               class="footer-link text-gray-300 hover:text-white text-sm">
+              {{ link.label }}
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Seção Newsletter e Redes Sociais -->
+      <div class="footer-section space-y-6 transition-all duration-300">
+        <!-- Newsletter -->
+        <div>
+          <h3 class="section-title">Newsletter</h3>
+          <p class="text-sm text-gray-400 mb-4">
+            Receba ofertas exclusivas e novidades em primeira mão!
+          </p>
+          <form (ngSubmit)="onNewsletterSubmit()" class="newsletter-form space-y-3">
+            <input 
+              type="email" 
+              [(ngModel)]="newsletterEmail"
+              name="newsletterEmail"
+              placeholder="Seu e-mail"
+              class="newsletter-input w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+              required>
+            <button 
+              type="submit"
+              class="newsletter-button w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md text-sm">
+              Inscrever-se
+            </button>
+          </form>
+        </div>
+
+        <!-- Redes Sociais -->
+        <div>
+          <h4 class="text-md font-medium text-white mb-3">Siga-nos</h4>
+          <div class="social-links flex space-x-4">
+            <a *ngFor="let social of socialLinks" 
+               [href]="social.url" 
+               target="_blank"
+               class="social-icon text-gray-400 hover:text-white"
+               [attr.aria-label]="social.name">
+              <!-- Ícones SVG inline -->
+              <svg *ngIf="social.icon === 'facebook'" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+              </svg>
+              <svg *ngIf="social.icon === 'instagram'" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 6.62 5.367 11.987 11.988 11.987 6.62 0 11.987-5.367 11.987-11.987C24.014 5.367 18.637.001 12.017.001zM8.449 16.988c-1.297 0-2.448-.49-3.323-1.297C4.198 14.895 3.708 13.744 3.708 12.447s.49-2.448 1.297-3.323c.875-.807 2.026-1.297 3.323-1.297s2.448.49 3.323 1.297c.807.875 1.297 2.026 1.297 3.323s-.49 2.448-1.297 3.323c-.875.807-2.026 1.297-3.323 1.297zm7.718-1.297c-.875.807-2.026 1.297-3.323 1.297s-2.448-.49-3.323-1.297c-.807-.875-1.297-2.026-1.297-3.323s.49-2.448 1.297-3.323c.875-.807 2.026-1.297 3.323-1.297s2.448.49 3.323 1.297c.807.875 1.297 2.026 1.297 3.323s-.49 2.448-1.297 3.323z"/>
+              </svg>
+              <svg *ngIf="social.icon === 'twitter'" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+              </svg>
+              <svg *ngIf="social.icon === 'youtube'" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Informações de Contato -->
+    <div class="border-t border-gray-800 mt-12 pt-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div>
+          <h4 class="text-md font-medium text-white mb-3">Contato</h4>
+          <div class="space-y-2 text-sm">
+            <p class="flex items-center">
+              <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
+              </svg>
+              (11) 1234-5678
+            </p>
+            <p class="flex items-center">
+              <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
+                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
+              </svg>
+              contato@bcommerce.com
+            </p>
+            <p class="flex items-start">
+              <svg class="w-4 h-4 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+              </svg>
+              Rua das Flores, 123<br>
+              São Paulo - SP, 01234-567
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="text-md font-medium text-white mb-3">Horário de Funcionamento</h4>
+          <div class="space-y-1 text-sm">
+            <p>Segunda a Sexta: 8h às 18h</p>
+            <p>Sábado: 9h às 17h</p>
+            <p>Domingo: 10h às 16h</p>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="text-md font-medium text-white mb-3">Certificados</h4>
+          <div class="flex space-x-4">
+            <div class="certificate-badge bg-gray-800 px-3 py-2 rounded text-xs">SSL</div>
+            <div class="certificate-badge bg-gray-800 px-3 py-2 rounded text-xs">PCI DSS</div>
+            <div class="certificate-badge bg-gray-800 px-3 py-2 rounded text-xs">ISO 27001</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rodapé Inferior -->
+  <div class="border-t border-gray-800 bg-gray-950">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div class="footer-bottom flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+        
+        <!-- Copyright e Links Legais -->
+        <div class="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-6 text-sm">
+          <p class="copyright-text">&copy; {{ currentYear }} BCommerce. Todos os direitos reservados.</p>
+          <div class="flex space-x-4">
+            <a routerLink="/terms" class="footer-link text-gray-400 hover:text-white">
+              Termos de Uso
+            </a>
+            <a routerLink="/privacy" class="footer-link text-gray-400 hover:text-white">
+              Política de Privacidade
+            </a>
+            <a routerLink="/cookies" class="footer-link text-gray-400 hover:text-white">
+              Cookies
+            </a>
+          </div>
+        </div>
+
+        <!-- Formas de Pagamento -->
+        <div class="payment-methods flex items-center space-x-4">
+          <span class="text-sm text-gray-400">Formas de pagamento:</span>
+          <div class="flex space-x-2">
+            <div *ngFor="let payment of paymentMethods" 
+                 class="payment-badge bg-white rounded px-2 py-1 text-xs font-medium text-gray-900"
+                 [title]="payment.name">
+              {{ payment.name }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
