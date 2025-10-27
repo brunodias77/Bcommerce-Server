@@ -4,6 +4,7 @@ import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../../core/services/auth.service';
 import { RegisterUserRequest } from '../../../../core/models/user.model';
+import { ToastService } from '../../../../core/services/toast.service';
 
 @Component({
   selector: 'app-register',
@@ -16,6 +17,7 @@ export class Register {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private toastService = inject(ToastService);
 
   // Signals para gerenciamento de estado
   isLoading = signal(false);
@@ -179,12 +181,18 @@ export class Register {
       const response = await this.authService.register(registerData);
 
       if (response.success) {
+        // Mostrar toast de sucesso
+        this.toastService.success('Conta criada com sucesso! Bem-vindo!');
         // Registro bem-sucedido, redirecionar para dashboard
         await this.router.navigate(['/dashboard']);
       } else {
+        // Mostrar toast de erro
+        this.toastService.error(response.message || 'Erro ao criar conta');
         this.errorMessage.set(response.message || 'Erro ao criar conta');
       }
     } catch (error: any) {
+      // Mostrar toast de erro para exceções
+      this.toastService.error(error?.message || 'Erro interno. Tente novamente.');
       this.errorMessage.set(error?.message || 'Erro inesperado ao criar conta');
     } finally {
       this.isLoading.set(false);

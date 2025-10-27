@@ -1,1 +1,19 @@
-<router-outlet></router-outlet>
+<div class="flex flex-col min-h-screen">
+  <!-- Header -->
+  <header class="flex-none">
+    <app-header></app-header>
+  </header>
+
+  <!-- Conteúdo principal -->
+  <main class="flex-1 pt-6">
+    <router-outlet></router-outlet>
+  </main>
+
+  <!-- Footer -->
+  <footer class="flex-none">
+    <app-footer></app-footer>
+  </footer>
+</div>
+
+<!-- Toast sempre visível por cima -->
+<app-toast class="fixed bottom-4 right-4 z-50"></app-toast>

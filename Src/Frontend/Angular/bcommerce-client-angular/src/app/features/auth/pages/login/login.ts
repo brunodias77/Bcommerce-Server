@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../../core/services/auth.service';
+import { ToastService } from '../../../../core/services/toast.service';
 import { LoginRequest } from '../../../../core/models/user.model';
 
 @Component({
@@ -15,6 +16,7 @@ import { LoginRequest } from '../../../../core/models/user.model';
 export class Login {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
+  private toastService = inject(ToastService);
   private router = inject(Router);
 
   // Signals para estado do componente
@@ -91,14 +93,21 @@ export class Login {
       const response = await this.authService.login(loginData);
 
       if (response.success) {
+        // Mostrar toast de sucesso
+        this.toastService.success('Login realizado com sucesso! Bem-vindo!');
+        
         // Redirecionar para perfil do usuário
         await this.router.navigate(['/profile']);
       } else {
         this.errorMessage.set(response.message || 'Erro ao fazer login');
+        // Mostrar toast de erro
+        this.toastService.error(response.message || 'Erro ao fazer login');
       }
     } catch (error: any) {
       console.error('Erro no login:', error);
       this.errorMessage.set('Erro interno. Tente novamente.');
+      // Mostrar toast de erro para exceções
+      this.toastService.error('Erro interno. Tente novamente.');
     } finally {
       this.isLoading.set(false);
     }

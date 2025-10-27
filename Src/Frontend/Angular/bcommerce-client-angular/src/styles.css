@@ -1,4 +1,3 @@
-/* You can add global styles to this file, and also import other style files */
 @import 'tailwindcss';
 
 @theme {
@@ -7,6 +6,21 @@
   --animate-bounce-in: bounce-in 0.6s ease-out;
   --animate-shake: shake 0.5s ease-in-out;
   --animate-gradient: gradient 15s ease infinite;
+
+  --text-title-primary: #2d2926;
+
+  --color-black-primary: #2d2926;
+
+  --color-yellow-primary: #fec857;
+  --color-yellow-secondary: #e0ac3c;
+
+  --color-green-primary: #2dc26e;
+
+  --color-gray-primary: #777777;
+  --color-gray-secondary: #4b5563;
+  --color-gray-tertiary: #999999;
+
+  --color-blue-primary: #4b5966;
 }
 
 @keyframes fade-in {
@@ -50,13 +64,21 @@
 }
 
 @keyframes shake {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateX(0);
   }
-  10%, 30%, 50%, 70%, 90% {
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
     transform: translateX(-5px);
   }
-  20%, 40%, 60%, 80% {
+  20%,
+  40%,
+  60%,
+  80% {
     transform: translateX(5px);
   }
 }
