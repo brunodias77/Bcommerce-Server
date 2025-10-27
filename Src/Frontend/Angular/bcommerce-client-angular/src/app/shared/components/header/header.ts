@@ -1,8 +1,10 @@
 import { Component, HostListener, signal } from '@angular/core';
+import { UserIcon } from '../../icons/user-icon/user-icon';
+import { HeartIcon } from '../../icons/heart-icon/heart-icon';
 
 @Component({
   selector: 'app-header',
-  imports: [],
+  imports: [UserIcon, HeartIcon],
   templateUrl: './header.html',
   styleUrl: './header.css',
 })
