@@ -47,10 +47,6 @@ export class Header {
       : 'w-9 h-9 transition-all duration-300';
   }
 
-  titleClasses() {
-    const base = 'font-bold text-gray-900 transition-all duration-300';
-    return this.isScrolled() ? `${base} text-lg` : `${base} text-xl`;
-  }
 
   navLinkClasses() {
     const base =
