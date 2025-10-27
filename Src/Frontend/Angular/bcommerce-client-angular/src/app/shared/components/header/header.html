@@ -2,51 +2,51 @@
 <header [class]="headerClasses()">
   <div [class]="containerClasses()">
     <!-- Logo e Categorias -->
-    <div class="flex items-center space-x-6">
-      <div class="flex items-center space-x-3">
-        <div [class]="logoClasses()">
-          <img
-            src="/assets/logo/logo-bcommerce.png"
-            alt="BCommerce Logo"
-            class="w-full h-full object-contain"
-          />
-        </div>
-      </div>
-
-      <!-- Categorias Desktop -->
-      <nav class="hidden lg:flex items-center space-x-6">
-        <a href="#" [class]="navLinkClasses()">Novidades</a>
-        <a href="#" [class]="navLinkClasses()">Masculino</a>
-        <a href="#" [class]="navLinkClasses()">Feminino</a>
-        <a href="#" [class]="navLinkClasses()">Ofertas</a>
-      </nav>
+    <div [class]="logoClasses()">
+      <a href="">
+        <img
+          src="/assets/logo/logo-bcommerce.png"
+          alt="BCommerce Logo"
+          class="w-full h-full object-contain"
+        />
+      </a>
     </div>
 
-    <!-- Barra de Busca -->
-    <div class="hidden md:flex flex-1 max-w-xl mx-6">
-      <div [class]="searchBarClasses()">
-        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-          />
-        </svg>
-        <input type="text" placeholder="Buscar produtos..." [class]="searchInputClasses()" />
+    <!-- Barra de Busca / Categorias -->
+    <div class="flex items-center space-x-6">
+      <nav class="hidden lg:flex items-center space-x-6">
+        <a href="#" [class]="navLinkClasses()">Inicio</a>
+        <a href="#" [class]="navLinkClasses()">Categorias</a>
+        <a href="#" [class]="navLinkClasses()">Ofertas</a>
+        <a href="#" [class]="navLinkClasses()">Blog</a>
+      </nav>
+
+      <div class="hidden md:flex flex-1 max-w-xl mx-6">
+        <div [class]="searchBarClasses()">
+          <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            />
+          </svg>
+          <input type="text" placeholder="Buscar produtos..." [class]="searchInputClasses()" />
+        </div>
       </div>
     </div>
 
     <!-- Actions: Favoritos, Conta e Carrinho -->
     <div class="flex items-center justify-center">
       <!-- Conta -->
-      <button class="hidden md:block p-2 text-gray-600 hover:text-blue-600 transition-colors">
+      <button
+        class="hidden md:block p-2 text-gray-600 hover:text-blue-600 transition-colors cursor-pointer"
+        (click)="navigateToLogin()"
+      >
         <app-user-icon [size]="24" color="currentColor"></app-user-icon>
       </button>
       <!-- Favoritos -->
-      <button
-        class="hidden md:block p-2 text-gray-600 hover:text-red-500 transition-colors relative"
-      >
+      <button class="hidden md:block p-2 text-gray-600 transition-colors relative">
         <app-heart-icon [size]="24" color="currentColor"></app-heart-icon>
       </button>
 

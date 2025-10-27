@@ -1,4 +1,5 @@
 import { Component, HostListener, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { UserIcon } from '../../icons/user-icon/user-icon';
 import { HeartIcon } from '../../icons/heart-icon/heart-icon';
 import { CartIcon } from '../../icons/cart-icon/cart-icon';
@@ -15,6 +16,8 @@ export class Header {
 
   // Signal para controlar o estado do menu mobile
   isMobileMenuOpen = signal(false);
+
+  constructor(private router: Router) {}
 
   @HostListener('window:scroll', [])
   onWindowScroll() {
@@ -77,5 +80,10 @@ export class Header {
   // Função para fechar o menu mobile
   closeMobileMenu() {
     this.isMobileMenuOpen.set(false);
+  }
+
+  // Função para navegar para a página de login
+  navigateToLogin() {
+    this.router.navigate(['/login']);
   }
 }
