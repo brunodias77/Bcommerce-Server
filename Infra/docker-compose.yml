@@ -30,6 +30,9 @@ volumes:
     name: bcommerce-notification-db-data
   events-db-data:
     name: bcommerce-events-db-data
+  # Volume persistente para RabbitMQ
+  rabbitmq-data:
+    name: bcommerce-rabbitmq-data
 
 
 services:
@@ -300,6 +303,39 @@ services:
           cpus: '0.5'
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${EVENTS_DB_USER:-events_user} -d ${EVENTS_DB_NAME:-events_db}"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # =============================================
+  # RABBITMQ MESSAGE BROKER
+  # =============================================
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: bcommerce-rabbitmq
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER:-admin}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS:-rabbitmq_password_2024}
+      RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_DEFAULT_VHOST:-bcommerce}
+    ports:
+      - "${RABBITMQ_AMQP_PORT:-5672}:5672"
+      - "${RABBITMQ_MANAGEMENT_PORT:-15672}:15672"
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - bcommerce-network
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: '0.75'
+        reservations:
+          memory: 512M
+          cpus: '0.5'
+    healthcheck:
+      test: ["CMD-SHELL", "rabbitmq-diagnostics -q ping"]
       interval: 30s
       timeout: 10s
       retries: 3
